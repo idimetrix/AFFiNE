@@ -343,6 +343,7 @@ __metadata:
     "@storybook/react": "npm:^8.2.9"
     "@storybook/react-vite": "npm:^8.2.9"
     "@testing-library/react": "npm:^16.0.0"
+    "@toeverything/pdf-viewer": "workspace:*"
     "@toeverything/theme": "npm:^1.0.11"
     "@types/react": "npm:^18.2.75"
     "@types/react-dom": "npm:^18.2.24"
@@ -351,6 +352,7 @@ __metadata:
     check-password-strength: "npm:^2.0.10"
     clsx: "npm:^2.1.0"
     dayjs: "npm:^1.11.10"
+    file-type: "npm:^19.1.0"
     jotai: "npm:^2.8.0"
     lit: "npm:^3.1.2"
     lodash-es: "npm:^4.17.21"
@@ -5351,7 +5353,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-tools/merge@npm:9.0.8, @graphql-tools/merge@npm:^9.0.0, @graphql-tools/merge@npm:^9.0.8":
+"@graphql-tools/merge@npm:9.0.8, @graphql-tools/merge@npm:^9.0.8":
   version: 9.0.8
   resolution: "@graphql-tools/merge@npm:9.0.8"
   dependencies:
@@ -5372,6 +5374,18 @@ __metadata:
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
   checksum: 10/62a4e93812e11d083c17f7763f4333a29dbe99fddbff705ff5942a0bdbb9dcd14f668bd76bd3edda485534d5d1a7f09bac311b979196b6149df11d8968a83723
+  languageName: node
+  linkType: hard
+
+"@graphql-tools/merge@npm:^9.0.0, @graphql-tools/merge@npm:^9.0.6":
+  version: 9.0.7
+  resolution: "@graphql-tools/merge@npm:9.0.7"
+  dependencies:
+    "@graphql-tools/utils": "npm:^10.5.4"
+    tslib: "npm:^2.4.0"
+  peerDependencies:
+    graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
+  checksum: 10/afe9b11f2d1e43dd3fce8e510aa20846137acfb6cb6d9362e5cfe954f2daaa5c169b77c3013a21f3263c690dee2f3b3e235e305e49c3cc398bdb166ddf2d082b
   languageName: node
   linkType: hard
 
@@ -5425,7 +5439,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-tools/schema@npm:10.0.7, @graphql-tools/schema@npm:^10.0.0, @graphql-tools/schema@npm:^10.0.3, @graphql-tools/schema@npm:^10.0.4":
+"@graphql-tools/schema@npm:10.0.7":
   version: 10.0.7
   resolution: "@graphql-tools/schema@npm:10.0.7"
   dependencies:
@@ -5436,6 +5450,20 @@ __metadata:
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
   checksum: 10/363db25c96aa33a66907a3a3938f899506435ef1b6d27a5fd85e04993cb48b4012144a8b24e279464399a36a2fb87488e6a70a872d6c24a055323ff7afd39455
+  languageName: node
+  linkType: hard
+
+"@graphql-tools/schema@npm:^10.0.0, @graphql-tools/schema@npm:^10.0.3, @graphql-tools/schema@npm:^10.0.4":
+  version: 10.0.6
+  resolution: "@graphql-tools/schema@npm:10.0.6"
+  dependencies:
+    "@graphql-tools/merge": "npm:^9.0.6"
+    "@graphql-tools/utils": "npm:^10.5.4"
+    tslib: "npm:^2.4.0"
+    value-or-promise: "npm:^1.0.12"
+  peerDependencies:
+    graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
+  checksum: 10/f667ed6bf8c8419cee8929c19b1b31c55894526a25f36463d106baf31b19cee8b297281eef07de7e3d94173d03a8ade4570a6e338b1482a27f8eae09d9ade4a8
   languageName: node
   linkType: hard
 
@@ -5476,7 +5504,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-tools/utils@npm:10.5.5, @graphql-tools/utils@npm:^10.0.0, @graphql-tools/utils@npm:^10.0.13, @graphql-tools/utils@npm:^10.1.1, @graphql-tools/utils@npm:^10.3.0, @graphql-tools/utils@npm:^10.3.2, @graphql-tools/utils@npm:^10.3.4, @graphql-tools/utils@npm:^10.5.5":
+"@graphql-tools/utils@npm:10.5.5, @graphql-tools/utils@npm:^10.5.5":
   version: 10.5.5
   resolution: "@graphql-tools/utils@npm:10.5.5"
   dependencies:
@@ -5487,6 +5515,20 @@ __metadata:
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
   checksum: 10/22632365d40a049bd5db319493b0c28ee56b4dd128d8b95598b5726ef8acf3cacb7fa7c735d1d982ccbc070c84838c162e933b12eca38ce8a19959d3895a461e
+  languageName: node
+  linkType: hard
+
+"@graphql-tools/utils@npm:^10.0.0, @graphql-tools/utils@npm:^10.0.13, @graphql-tools/utils@npm:^10.1.1, @graphql-tools/utils@npm:^10.3.0, @graphql-tools/utils@npm:^10.3.2, @graphql-tools/utils@npm:^10.3.4, @graphql-tools/utils@npm:^10.5.4":
+  version: 10.5.4
+  resolution: "@graphql-tools/utils@npm:10.5.4"
+  dependencies:
+    "@graphql-typed-document-node/core": "npm:^3.1.1"
+    cross-inspect: "npm:1.0.1"
+    dset: "npm:^3.1.2"
+    tslib: "npm:^2.4.0"
+  peerDependencies:
+    graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
+  checksum: 10/e6750800be215cbd8b4cc67019ba91b881c6093a4ac71258eeef9f1f3101b1e81e862435fd5b05cb40d94d40e396d0a3629ad6613226d7a4f75b8c5329a03aa7
   languageName: node
   linkType: hard
 
@@ -13174,6 +13216,27 @@ __metadata:
     yjs:
       optional: true
   languageName: unknown
+  linkType: soft
+
+"@toeverything/pdf-viewer-types@portal:/Users/fundon/dev/toeverything/pdfium-builder/packages/types::locator=%40affine%2Fmonorepo%40workspace%3A.":
+  version: 0.0.0-use.local
+  resolution: "@toeverything/pdf-viewer-types@portal:/Users/fundon/dev/toeverything/pdfium-builder/packages/types::locator=%40affine%2Fmonorepo%40workspace%3A."
+  languageName: node
+  linkType: soft
+
+"@toeverything/pdf-viewer@portal:/Users/fundon/dev/toeverything/pdfium-builder/packages/pdf-viewer::locator=%40affine%2Fmonorepo%40workspace%3A.":
+  version: 0.0.0-use.local
+  resolution: "@toeverything/pdf-viewer@portal:/Users/fundon/dev/toeverything/pdfium-builder/packages/pdf-viewer::locator=%40affine%2Fmonorepo%40workspace%3A."
+  dependencies:
+    "@toeverything/pdf-viewer-types": "workspace:*"
+    "@toeverything/pdfium": "workspace:*"
+  languageName: node
+  linkType: soft
+
+"@toeverything/pdfium@portal:/Users/fundon/dev/toeverything/pdfium-builder/packages/pdfium::locator=%40affine%2Fmonorepo%40workspace%3A.":
+  version: 0.0.0-use.local
+  resolution: "@toeverything/pdfium@portal:/Users/fundon/dev/toeverything/pdfium-builder/packages/pdfium::locator=%40affine%2Fmonorepo%40workspace%3A."
+  languageName: node
   linkType: soft
 
 "@toeverything/theme@npm:^1.0.11, @toeverything/theme@npm:^1.0.8":

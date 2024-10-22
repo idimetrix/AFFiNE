@@ -155,6 +155,9 @@
     "which-typed-array": "npm:@nolyfill/which-typed-array@latest",
     "@reforged/maker-appimage/@electron-forge/maker-base": "7.5.0",
     "macos-alias": "npm:@napi-rs/macos-alias@0.0.4",
-    "fs-xattr": "npm:@napi-rs/xattr@latest"
+    "fs-xattr": "npm:@napi-rs/xattr@latest",
+    "@toeverything/pdf-viewer": "portal:/Users/fundon/dev/toeverything/pdfium-builder/packages/pdf-viewer",
+    "@toeverything/pdf-viewer-types": "portal:/Users/fundon/dev/toeverything/pdfium-builder/packages/types",
+    "@toeverything/pdfium": "portal:/Users/fundon/dev/toeverything/pdfium-builder/packages/pdfium"
   }
 }
