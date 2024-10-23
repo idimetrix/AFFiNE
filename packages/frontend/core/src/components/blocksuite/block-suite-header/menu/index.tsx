@@ -8,13 +8,18 @@ import {
 import { PageHistoryModal } from '@affine/core/components/affine/page-history-modal';
 import { ShareMenuContent } from '@affine/core/components/affine/share-page-modal/share-menu';
 import { openHistoryTipsModalAtom } from '@affine/core/components/atoms';
+import { useAppSettingHelper } from '@affine/core/components/hooks/affine/use-app-setting-helper';
 import { useBlockSuiteMetaHelper } from '@affine/core/components/hooks/affine/use-block-suite-meta-helper';
 import { useEnableCloud } from '@affine/core/components/hooks/affine/use-enable-cloud';
 import { useExportPage } from '@affine/core/components/hooks/affine/use-export-page';
 import { useTrashModalHelper } from '@affine/core/components/hooks/affine/use-trash-modal-helper';
 import { useAsyncCallback } from '@affine/core/components/hooks/affine-async-hooks';
 import { useDocMetaHelper } from '@affine/core/components/hooks/use-block-suite-page-meta';
-import { Export, MoveToTrash } from '@affine/core/components/page-list';
+import {
+  Export,
+  MoveToTrash,
+  Snapshot,
+} from '@affine/core/components/page-list';
 import { IsFavoriteIcon } from '@affine/core/components/pure/icons';
 import { useDetailPageHeaderResponsive } from '@affine/core/desktop/pages/workspace/detail-page/use-header-responsive';
 import { DocInfoService } from '@affine/core/modules/doc-info';
@@ -86,6 +91,7 @@ export const PageHeaderMenuButton = ({
 
   const [isEditing, setEditing] = useState(!page.readonly);
   const { setDocReadonly } = useDocMetaHelper();
+  const { appSettings } = useAppSettingHelper();
 
   const view = useService(ViewService).view;
 
@@ -357,6 +363,7 @@ export const PageHeaderMenuButton = ({
         {t['Import']()}
       </MenuItem>
       <Export exportHandler={exportHandler} pageMode={currentMode} />
+      {appSettings.enableSnapshotImportExport && <Snapshot />}
       <MenuSeparator />
       <MoveToTrash
         data-testid="editor-option-menu-delete"
