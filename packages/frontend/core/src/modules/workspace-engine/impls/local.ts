@@ -1,3 +1,4 @@
+import { DebugLogger } from '@affine/debug';
 import { apis } from '@affine/electron-api';
 import { WorkspaceFlavour } from '@affine/env/workspace';
 import { DocCollection } from '@blocksuite/affine/store';
@@ -27,6 +28,32 @@ export const LOCAL_WORKSPACE_LOCAL_STORAGE_KEY = 'affine-local-workspace';
 const LOCAL_WORKSPACE_CHANGED_BROADCAST_CHANNEL_KEY =
   'affine-local-workspace-changed';
 
+const logger = new DebugLogger('local-workspace');
+
+export function getLocalWorkspaceIds(): string[] {
+  try {
+    return JSON.parse(
+      localStorage.getItem(LOCAL_WORKSPACE_LOCAL_STORAGE_KEY) ?? '[]'
+    );
+  } catch (e) {
+    logger.error('Failed to get local workspace ids', e);
+    return [];
+  }
+}
+
+export function setLocalWorkspaceIds(
+  idsOrUpdater: string[] | ((ids: string[]) => string[])
+) {
+  localStorage.setItem(
+    LOCAL_WORKSPACE_LOCAL_STORAGE_KEY,
+    JSON.stringify(
+      typeof idsOrUpdater === 'function'
+        ? idsOrUpdater(getLocalWorkspaceIds())
+        : idsOrUpdater
+    )
+  );
+}
+
 export class LocalWorkspaceFlavourProvider
   extends Service
   implements WorkspaceFlavourProvider
@@ -43,13 +70,7 @@ export class LocalWorkspaceFlavourProvider
   );
 
   async deleteWorkspace(id: string): Promise<void> {
-    const allWorkspaceIDs: string[] = JSON.parse(
-      localStorage.getItem(LOCAL_WORKSPACE_LOCAL_STORAGE_KEY) ?? '[]'
-    );
-    localStorage.setItem(
-      LOCAL_WORKSPACE_LOCAL_STORAGE_KEY,
-      JSON.stringify(allWorkspaceIDs.filter(x => x !== id))
-    );
+    setLocalWorkspaceIds(ids => ids.filter(x => x !== id));
 
     if (BUILD_CONFIG.isElectron && apis) {
       await apis.workspace.delete(id);
@@ -88,14 +109,7 @@ export class LocalWorkspaceFlavourProvider
     }
 
     // save workspace id to local storage
-    const allWorkspaceIDs: string[] = JSON.parse(
-      localStorage.getItem(LOCAL_WORKSPACE_LOCAL_STORAGE_KEY) ?? '[]'
-    );
-    allWorkspaceIDs.push(id);
-    localStorage.setItem(
-      LOCAL_WORKSPACE_LOCAL_STORAGE_KEY,
-      JSON.stringify(allWorkspaceIDs)
-    );
+    setLocalWorkspaceIds(ids => [...ids, id]);
 
     // notify all browser tabs, so they can update their workspace list
     this.notifyChannel.postMessage(id);
@@ -106,9 +120,10 @@ export class LocalWorkspaceFlavourProvider
     new Observable<WorkspaceMetadata[]>(subscriber => {
       let last: WorkspaceMetadata[] | null = null;
       const emit = () => {
-        const value = JSON.parse(
-          localStorage.getItem(LOCAL_WORKSPACE_LOCAL_STORAGE_KEY) ?? '[]'
-        ).map((id: string) => ({ id, flavour: WorkspaceFlavour.LOCAL }));
+        const value = getLocalWorkspaceIds().map(id => ({
+          id,
+          flavour: WorkspaceFlavour.LOCAL,
+        }));
         if (isEqual(last, value)) return;
         subscriber.next(value);
         last = value;

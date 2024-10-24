@@ -5,7 +5,7 @@ declare global {
   // eslint-disable-next-line no-var
   var __appInfo: {
     electron: boolean;
-    schema: string;
+    scheme: string;
     windowName: string;
   };
 }

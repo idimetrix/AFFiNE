@@ -29,7 +29,7 @@ const getDefaultSubscriptionSuccessCallbackLink = (
   const urlString = getAffineCloudBaseUrl() + path;
   const url = new URL(urlString);
   if (BUILD_CONFIG.isElectron && appInfo) {
-    url.searchParams.set('schema', appInfo.schema);
+    url.searchParams.set('schema', appInfo.scheme);
   }
   return url.toString();
 };

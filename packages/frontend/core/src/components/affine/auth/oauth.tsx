@@ -68,7 +68,7 @@ function OAuthProvider({
     }
 
     if (BUILD_CONFIG.isElectron && appInfo) {
-      params.set('client', appInfo.schema);
+      params.set('client', appInfo.scheme);
     }
 
     const oauthUrl =

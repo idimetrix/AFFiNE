@@ -123,7 +123,7 @@ export class AuthService extends Service {
       }
       magicLinkUrlParams.set(
         'client',
-        BUILD_CONFIG.isElectron && appInfo ? appInfo.schema : 'web'
+        BUILD_CONFIG.isElectron && appInfo ? appInfo.scheme : 'web'
       );
       await this.fetchService.fetch('/api/auth/sign-in', {
         method: 'POST',

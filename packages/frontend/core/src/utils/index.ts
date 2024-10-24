@@ -5,4 +5,3 @@ export * from './popup';
 export * from './string2color';
 export * from './toast';
 export * from './unflatten-object';
-export * from './url';
