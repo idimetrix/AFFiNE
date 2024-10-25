@@ -20,6 +20,7 @@ import { PeekViewManagerModal } from '../../modules/peek-view';
 import { AuthModal } from '../affine/auth';
 import { AiLoginRequiredModal } from '../affine/auth/ai-login-required';
 import { HistoryTipsModal } from '../affine/history-tips-modal';
+import { ImportModal } from '../affine/import-modal';
 import { IssueFeedbackModal } from '../affine/issue-feedback-modal';
 import {
   CloudQuotaModal,
@@ -29,7 +30,11 @@ import { SettingModal } from '../affine/setting-modal';
 import { SignOutModal } from '../affine/sign-out-modal';
 import { StarAFFiNEModal } from '../affine/star-affine-modal';
 import type { SettingAtom } from '../atoms';
-import { openSettingModalAtom, openSignOutModalAtom } from '../atoms';
+import {
+  openImportModalAtom,
+  openSettingModalAtom,
+  openSignOutModalAtom,
+} from '../atoms';
 import { InfoModal } from '../doc-properties/info-modal/info-modal';
 import { useTrashModalHelper } from '../hooks/affine/use-trash-modal-helper';
 import { useAsyncCallback } from '../hooks/affine-async-hooks';
@@ -128,6 +133,7 @@ export function CurrentWorkspaceModals() {
         titles={deletePageTitles}
       />
       {currentWorkspace ? <InfoModal /> : null}
+      <Import />
     </>
   );
 }
@@ -192,4 +198,21 @@ export const AllWorkspaceModals = (): ReactElement => {
       <SignOutConfirmModal />
     </>
   );
+};
+
+export const Import = () => {
+  const [open, setOpenImportModalAtom] = useAtom(openImportModalAtom);
+
+  const onOpenChange = useCallback(
+    (open: boolean) => {
+      setOpenImportModalAtom(open);
+    },
+    [setOpenImportModalAtom]
+  );
+
+  if (!open) {
+    return null;
+  }
+
+  return <ImportModal open={open} onOpenChange={onOpenChange} />;
 };

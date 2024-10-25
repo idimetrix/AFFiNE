@@ -1,4 +1,7 @@
-import { openSettingModalAtom } from '@affine/core/components/atoms';
+import {
+  openImportModalAtom,
+  openSettingModalAtom,
+} from '@affine/core/components/atoms';
 import { useAsyncCallback } from '@affine/core/components/hooks/affine-async-hooks';
 import {
   AddPageButton,
@@ -28,6 +31,7 @@ import type { Doc } from '@blocksuite/affine/store';
 import {
   AllDocsIcon,
   GithubIcon,
+  ImportIcon,
   JournalIcon,
   SettingsIcon,
 } from '@blocksuite/icons/rc';
@@ -44,7 +48,6 @@ import { useCallback, useEffect } from 'react';
 import { WorkbenchService } from '../../modules/workbench';
 import { usePageHelper } from '../blocksuite/block-suite-page-list/utils';
 import { WorkspaceNavigator } from '../workspace-selector';
-import ImportPage from './import-page';
 import {
   quickSearch,
   quickSearchAndNewPage,
@@ -83,7 +86,6 @@ export const RootAppSidebar = (): ReactElement => {
       CMDKQuickSearchService,
     });
   const currentWorkspace = workspaceService.workspace;
-  const docCollection = currentWorkspace.docCollection;
   const t = useI18n();
   const workbench = workbenchService.workbench;
   const currentPath = useLiveData(
@@ -125,6 +127,7 @@ export const RootAppSidebar = (): ReactElement => {
   }, [onClickNewPage]);
 
   const setOpenSettingModalAtom = useSetAtom(openSettingModalAtom);
+  const setOpenImportModalAtom = useSetAtom(openImportModalAtom);
 
   const onOpenSettingModal = useCallback(() => {
     setOpenSettingModalAtom({
@@ -133,6 +136,10 @@ export const RootAppSidebar = (): ReactElement => {
     });
     track.$.navigationPanel.$.openSettings();
   }, [setOpenSettingModalAtom]);
+
+  const onOpenImportModal = useCallback(() => {
+    setOpenImportModalAtom(true);
+  }, [setOpenImportModalAtom]);
 
   return (
     <AppSidebar>
@@ -183,7 +190,13 @@ export const RootAppSidebar = (): ReactElement => {
         <CategoryDivider label={t['com.affine.rootAppSidebar.others']()} />
         <div style={{ padding: '0 8px' }}>
           <TrashButton />
-          <ImportPage docCollection={docCollection} />
+          <MenuItem
+            data-testid="slider-bar-import-button"
+            icon={<ImportIcon />}
+            onClick={onOpenImportModal}
+          >
+            <span data-testid="import-modal-trigger">{t['Import']()}</span>
+          </MenuItem>
           <ExternalMenuLinkItem
             href="https://affine.pro/blog?tag=Release+Note"
             icon={<JournalIcon />}

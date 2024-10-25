@@ -35,6 +35,8 @@ export const openSettingModalAtom = atom<SettingAtom>({
   open: false,
 });
 
+export const openImportModalAtom = atom(false);
+
 export type AuthAtomData =
   | { state: 'signIn' }
   | {
