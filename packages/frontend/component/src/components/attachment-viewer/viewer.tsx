@@ -208,7 +208,6 @@ export const Viewer = ({ model }: ViewerProps): ReactElement => {
 
   const onSelect = useCallback(
     (index: number) => {
-      console.log(index);
       scrollerHandleRef.current?.scrollToIndex(index);
       setDocInfo(info => ({ ...info, cursor: index }));
     },
@@ -228,10 +227,6 @@ export const Viewer = ({ model }: ViewerProps): ReactElement => {
       }),
     [setThumbnailsVisibleRange]
   );
-
-  // useLayoutEffect(() => {
-  //   console.log('viewport', viewerRef.current?.getBoundingClientRect());
-  // }, []);
 
   // useEffect(() => {
   //   const el = viewerRef.current;
