@@ -21,6 +21,8 @@ import {
 import { Suspense } from 'react';
 import { RouterProvider } from 'react-router-dom';
 
+import { Hashcash } from './hashcash-plugin';
+
 const future = {
   v7_startTransition: true,
 } as const;
@@ -59,3 +61,11 @@ export function App() {
     </Suspense>
   );
 }
+
+Hashcash.hash({ challenge: 'whateveritis' })
+  .then(res => {
+    console.log(res);
+  })
+  .catch(err => {
+    console.error(err);
+  });

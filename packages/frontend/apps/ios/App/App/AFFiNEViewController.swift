@@ -7,5 +7,8 @@ class AFFiNEViewController: CAPBridgeViewController {
     super.viewDidLoad()
     webView?.allowsBackForwardNavigationGestures = true
   }
-  
+
+  override open func capacitorDidLoad() {
+    bridge?.registerPluginInstance(HashcashPlugin())
+  }
 }
