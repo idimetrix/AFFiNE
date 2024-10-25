@@ -83,7 +83,11 @@ export function AffinePageReference({
       if (e.shiftKey && ref.current) {
         e.preventDefault();
         e.stopPropagation();
-        peekView.open(ref.current).catch(console.error);
+        peekView
+          .open({
+            element: ref.current,
+          })
+          .catch(console.error);
       }
 
       if (isInPeekView) {
