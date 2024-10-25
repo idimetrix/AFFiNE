@@ -10,6 +10,7 @@ import type {
   SurfaceBlockModel,
 } from '@blocksuite/affine/blocks';
 import {
+  addImages,
   DeleteIcon,
   EDGELESS_ELEMENT_TOOLBAR_WIDGET,
   EDGELESS_TEXT_BLOCK_MIN_HEIGHT,
@@ -312,8 +313,7 @@ const imageHandler = (host: EditorHost) => {
       const [x, y] = edgelessRoot.service.viewport.toViewCoord(minX, minY);
 
       host.doc.transact(() => {
-        edgelessRoot
-          .addImages([img], [x, y])
+        addImages(edgelessRoot.std, [img], [x, y])
           .then(blockIds => {
             const imageBlockId = blockIds[0];
             const imageBlock = host.doc.getBlock(imageBlockId);
