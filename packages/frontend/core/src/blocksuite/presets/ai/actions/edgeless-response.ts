@@ -413,7 +413,7 @@ export const responses: {
       const mindmap = elements[0].group as MindmapElementModel;
       const xywh = mindmap.tree.element.xywh;
 
-      surface.removeElement(mindmap.id);
+      surface.deleteElement(mindmap.id);
 
       if (data.node) {
         data.node.xywh = xywh;

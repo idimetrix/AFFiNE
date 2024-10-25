@@ -388,7 +388,8 @@ function updateEdgelessAIPanelConfig<
   config.hideCallback = () => {
     aiPanel.updateComplete
       .finally(() => {
-        edgelessCopilot.edgeless.service.tool.switchToDefaultMode({
+        edgelessCopilot.edgeless.gfx.tool.setTool('default');
+        edgelessCopilot.edgeless.gfx.selection.set({
           elements: [],
           editing: false,
         });
