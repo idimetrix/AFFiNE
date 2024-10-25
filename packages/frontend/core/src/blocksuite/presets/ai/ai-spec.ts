@@ -15,7 +15,7 @@ import {
   EdgelessCopilotWidget,
   EdgelessElementToolbarWidget,
   EdgelessRootBlockSpec,
-  edgelessRootWigetViewMap,
+  edgelessRootWidgetViewMap,
   ImageBlockSpec,
   PageRootBlockSpec,
   pageRootWidgetViewMap,
@@ -114,7 +114,7 @@ export const AIEdgelessRootBlockSpec: ExtensionType[] = [
     setup: di => {
       di.override(WidgetViewMapIdentifier('affine:page'), () => {
         return {
-          ...edgelessRootWigetViewMap,
+          ...edgelessRootWidgetViewMap,
           [AFFINE_EDGELESS_COPILOT_WIDGET]: literal`${unsafeStatic(
             AFFINE_EDGELESS_COPILOT_WIDGET
           )}`,
