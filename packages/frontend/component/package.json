@@ -59,6 +59,7 @@
     "react-paginate": "^8.2.0",
     "react-router-dom": "^6.22.3",
     "react-transition-state": "^2.1.1",
+    "react-virtuoso": "^4.7.8",
     "sonner": "^1.4.41",
     "swr": "^2.2.5",
     "zod": "^3.22.4"

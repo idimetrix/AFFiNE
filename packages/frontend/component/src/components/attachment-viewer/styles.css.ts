@@ -49,10 +49,15 @@ export const body = style({
   selectors: {
     '&:before': {
       position: 'absolute',
+      // position: 'fixed',
       content: '',
-      width: '100%',
-      height: '100%',
-      zIndex: -1,
+      top: 0,
+      right: 0,
+      bottom: 0,
+      left: 0,
+      // width: '100%',
+      // height: '100%',
+      // zIndex: -1,
     },
     '&:not(.gridding):before': {
       backgroundColor: cssVarV2('layer/background/secondary'),
@@ -63,6 +68,10 @@ export const body = style({
       backgroundImage: `linear-gradient(${cssVarV2('button/grabber/default')} 1px, transparent 1px), linear-gradient(to right, ${cssVarV2('button/grabber/default')} 1px, transparent 1px)`,
     },
   },
+});
+
+export const virtuoso = style({
+  width: '100%',
 });
 
 export const error = style({
@@ -94,13 +103,11 @@ export const errorBtns = style({
   marginTop: '28px',
 });
 
-export const viewer = style({});
-
-export const viewerViewport = style({});
-
 export const viewerPage = style({
   margin: '20px auto',
+  maxWidth: 'calc(100% - 40px)',
   background: cssVarV2('layer/white'),
+  boxSizing: 'border-box',
   borderWidth: '1px',
   borderStyle: 'solid',
   borderColor: cssVarV2('layer/insideBorder/border'),
@@ -112,7 +119,7 @@ export const thumbnails = style({
   position: 'absolute',
   boxSizing: 'border-box',
   width: '120px',
-  padding: '12px',
+  padding: '12px 0',
   right: '30px',
   bottom: '30px',
   borderRadius: '8px',
@@ -130,7 +137,7 @@ export const thumbnails = style({
 export const thumbnailsPages = style({
   display: 'flex',
   flexDirection: 'column',
-  gap: '12px',
+  // gap: '12px',
   selectors: {
     '&.collapsed': {
       display: 'none',
@@ -142,8 +149,10 @@ export const thumbnailsPages = style({
 });
 
 export const thumbnailsPage = style({
+  margin: '0px 12px 12px',
   display: 'flex',
-  width: '100%',
+  overflow: 'clip',
+  // width: '100%',
   borderRadius: '4px',
   borderWidth: '1px',
   borderStyle: 'solid',
@@ -159,4 +168,5 @@ export const thumbnailsIndicator = style({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
+  padding: '0 12px',
 });

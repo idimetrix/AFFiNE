@@ -17,10 +17,10 @@ async function _saveBufferToFile(url: string, filename: string) {
   URL.revokeObjectURL(blobUrl);
 }
 
-async function attachmentUrlToBlob(url: string): Promise<Blob | undefined> {
-  const buffer = await fetch(url).then(response => {
-    return response.arrayBuffer();
-  });
+export async function attachmentUrlToBlob(
+  url: string
+): Promise<Blob | undefined> {
+  const buffer = await fetch(url).then(response => response.arrayBuffer());
 
   if (!buffer) {
     console.warn('Could not get blob');

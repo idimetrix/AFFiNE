@@ -14,20 +14,19 @@ export type AttachmentViewerProps = {
 export const AttachmentViewer = ({
   model,
 }: AttachmentViewerProps): ReactElement => {
-  const attachment = useMemo(() => {
+  const props = useMemo(() => {
     const pieces = model.name.split('.');
     const ext = pieces.pop() || '';
     const name = pieces.join('.');
     const isPDF = ext === 'pdf';
     const filesize = humanFileSize(model.size);
-
     return { model, name, ext, filesize, isPDF };
   }, [model]);
 
   return (
     <div className={styles.viewerContainer}>
-      <Titlebar {...attachment} />
-      {attachment.isPDF ? <Viewer /> : <Error {...attachment} />}
+      <Titlebar {...props} />
+      {props.isPDF ? <Viewer {...props} /> : <Error {...props} />}
     </div>
   );
 };

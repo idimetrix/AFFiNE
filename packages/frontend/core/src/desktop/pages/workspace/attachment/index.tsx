@@ -1,12 +1,12 @@
 import { AttachmentViewer } from '@affine/component/attachment-viewer';
-import { type AttachmentBlockModel,matchFlavours } from '@blocksuite/blocks';
+import { type AttachmentBlockModel, matchFlavours } from '@blocksuite/blocks';
 import {
   type Doc,
   DocsService,
   FrameworkScope,
   useService,
 } from '@toeverything/infra';
-import { type ReactElement, useEffect,useLayoutEffect, useState } from 'react';
+import { type ReactElement, useEffect, useLayoutEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import {
@@ -43,15 +43,9 @@ const useLoadAttachment = (pageId?: string, attachmentId?: string) => {
     if (!attachmentId) return;
 
     const disposable = doc.blockSuiteDoc.slots.blockUpdated
-      .filter(
-        v =>
-          v.type === 'add' &&
-          v.id === attachmentId &&
-          matchFlavours(v, ['affine:attachment'])
-      )
-      .once(block => {
-        setModel(block.model as AttachmentBlockModel);
-      });
+      .filter(({ type, id }) => type === 'add' && id === attachmentId)
+      .filter(({ model }) => matchFlavours(model, ['affine:attachment']))
+      .once(({ model }) => setModel(model as AttachmentBlockModel));
 
     return () => {
       disposable.dispose();
