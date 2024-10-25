@@ -21,7 +21,6 @@ export class CloudStaticDocStorage {
     );
     if (response.ok) {
       const arrayBuffer = await response.arrayBuffer();
-      console.log('arrayBuffer', arrayBuffer.byteLength);
 
       return { data: new Uint8Array(arrayBuffer) };
     }

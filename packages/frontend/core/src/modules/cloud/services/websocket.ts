@@ -1,6 +1,7 @@
 import { ApplicationStarted, OnEvent, Service } from '@toeverything/infra';
 import { Manager } from 'socket.io-client';
 
+import type { WebSocketAuthProvider } from '../provider/websocket-auth';
 import { getAffineCloudBaseUrl } from '../services/fetch';
 import type { AuthService } from './auth';
 import { AccountChanged } from './auth';
@@ -12,13 +13,31 @@ export class WebSocketService extends Service {
     autoConnect: false,
     transports: ['websocket'],
     secure: location.protocol === 'https:',
-    withCredentials: true,
   });
-  socket = this.ioManager.socket('/');
+  socket = this.ioManager.socket('/', {
+    auth: this.webSocketAuthProvider
+      ? cb => {
+          this.webSocketAuthProvider
+            ?.getAuthToken(`${getAffineCloudBaseUrl()}/`)
+            .then(v => {
+              cb(v ?? {});
+            })
+            .catch(e => {
+              console.error('Failed to get auth token for websocket', e);
+            });
+        }
+      : undefined,
+  });
   refCount = 0;
 
-  constructor(private readonly authService: AuthService) {
+  webSocketAuthProvider?: WebSocketAuthProvider;
+
+  constructor(
+    private readonly authService: AuthService,
+    webSocketAuthProvider: WebSocketAuthProvider[]
+  ) {
     super();
+    this.webSocketAuthProvider = webSocketAuthProvider.at(0);
   }
 
   /**

@@ -70,7 +70,7 @@ const convertBody = async (body: unknown, contentType: string) => {
     if (contentType === 'application/json') {
       try {
         data = JSON.parse(data);
-      } catch (ignored) {
+      } catch {
         // ignore
       }
       type = 'json';

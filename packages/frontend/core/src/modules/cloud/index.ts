@@ -6,6 +6,7 @@ export {
   isNetworkError,
   NetworkError,
 } from './error';
+export { WebSocketAuthProvider } from './provider/websocket-auth';
 export { AccountChanged, AuthService } from './services/auth';
 export { FetchService } from './services/fetch';
 export { GraphQLService } from './services/graphql';
@@ -37,6 +38,7 @@ import { UserCopilotQuota } from './entities/user-copilot-quota';
 import { UserFeature } from './entities/user-feature';
 import { UserQuota } from './entities/user-quota';
 import { DefaultFetchProvider, FetchProvider } from './provider/fetch';
+import { WebSocketAuthProvider } from './provider/websocket-auth';
 import { AuthService } from './services/auth';
 import { CloudDocMetaService } from './services/cloud-doc-meta';
 import { FetchService } from './services/fetch';
@@ -62,7 +64,7 @@ export function configureCloudModule(framework: Framework) {
     .service(FetchService, [FetchProvider])
     .impl(FetchProvider, DefaultFetchProvider)
     .service(GraphQLService, [FetchService])
-    .service(WebSocketService, [AuthService])
+    .service(WebSocketService, [AuthService, [WebSocketAuthProvider]])
     .service(ServerConfigService)
     .entity(ServerConfig, [ServerConfigStore])
     .store(ServerConfigStore, [GraphQLService])

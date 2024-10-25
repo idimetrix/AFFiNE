@@ -4,7 +4,7 @@ import { Telemetry } from '@affine/core/components/telemetry';
 import { configureMobileModules } from '@affine/core/mobile/modules';
 import { router } from '@affine/core/mobile/router';
 import { configureCommonModules } from '@affine/core/modules';
-import { AuthService } from '@affine/core/modules/cloud';
+import { AuthService, WebSocketAuthProvider } from '@affine/core/modules/cloud';
 import { I18nProvider } from '@affine/core/modules/i18n';
 import { configureLocalStorageStateStorageImpls } from '@affine/core/modules/storage';
 import {
@@ -29,6 +29,7 @@ import { Suspense } from 'react';
 import { RouterProvider } from 'react-router-dom';
 
 import { configureFetchProvider } from './fetch';
+import { Cookie } from './plugins/cookie';
 
 const future = {
   v7_startTransition: true,
@@ -56,6 +57,17 @@ framework.impl(ClientSchemaProvider, {
   },
 });
 configureFetchProvider(framework);
+framework.impl(WebSocketAuthProvider, {
+  getAuthToken: async url => {
+    const cookies = await Cookie.getCookies({
+      url,
+    });
+    return {
+      userId: cookies['affine_user_id'],
+      token: cookies['affine_session'],
+    };
+  },
+});
 const frameworkProvider = framework.provider();
 
 // setup application lifecycle events, and emit application start event

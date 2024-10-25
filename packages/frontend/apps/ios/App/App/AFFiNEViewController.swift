@@ -8,4 +8,8 @@ class AFFiNEViewController: CAPBridgeViewController {
     webView?.allowsBackForwardNavigationGestures = true
   }
   
+  override func capacitorDidLoad() {
+    bridge?.registerPluginInstance(CookiePlugin())
+  }
+  
 }

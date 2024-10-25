@@ -8,7 +8,7 @@ const config: CapacitorConfig = {
     path: '.',
   },
   server: {
-    url: 'http://localhost:8080',
+    // url: 'http://localhost:8080',
   },
   plugins: {
     CapacitorCookies: {
