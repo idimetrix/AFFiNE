@@ -13,7 +13,7 @@
     "@affine/component": "workspace:*",
     "@affine/core": "workspace:*",
     "@affine/i18n": "workspace:*",
-    "@blocksuite/affine": "0.0.0-canary-20241025023715",
+    "@blocksuite/affine": "0.0.0-canary-20241025034244",
     "@blocksuite/icons": "^2.1.67",
     "@capacitor/core": "^6.1.2",
     "@capacitor/ios": "^6.1.2",
