@@ -21,7 +21,7 @@ import {
 } from '@blocksuite/affine/blocks';
 import {
   Bound,
-  getBoundWithRotation,
+  getCommonBoundWithRotation,
   type SerializedXYWH,
 } from '@blocksuite/affine/global/utils';
 import type { Doc } from '@blocksuite/affine/store';
@@ -398,7 +398,7 @@ const ADD_TO_EDGELESS_AS_NOTE = {
     };
 
     if (elements.length > 0) {
-      const bound = getBoundWithRotation(
+      const bound = getCommonBoundWithRotation(
         elements.map(e => Bound.deserialize(e.xywh))
       );
       const newBound = new Bound(bound.x, bound.maxY + 10, bound.w);
@@ -494,7 +494,7 @@ const CREATE_AS_LINKED_DOC = {
     let y = 0;
     if (elements.length) {
       // Calculate the bound of the selected elements first
-      const bound = getBoundWithRotation(
+      const bound = getCommonBoundWithRotation(
         elements.map(e => Bound.deserialize(e.xywh))
       );
       x = bound.x;

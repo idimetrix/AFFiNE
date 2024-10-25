@@ -6,7 +6,7 @@ import type {
 import {
   type AIItemGroupConfig,
   type AISubItemConfig,
-  type CopilotSelectionController,
+  type CopilotTool,
   EDGELESS_ELEMENT_TOOLBAR_WIDGET,
   type EdgelessElementToolbarWidget,
   matchFlavours,
@@ -251,10 +251,9 @@ function edgelessHandler<T extends keyof BlockSuitePresets.AIActions>(
     if (!edgeless) {
       AIProvider.slots.requestRunInEdgeless.emit({ host });
     } else {
-      edgeless.tools.setEdgelessTool({ type: 'copilot' });
-      const currentController = edgeless.tools.controllers[
-        'copilot'
-      ] as CopilotSelectionController;
+      edgeless.gfx.tool.setTool({ type: 'copilot' });
+      const currentController =
+        edgeless.gfx.tool.currentTool$.peek() as CopilotTool;
       const selectedElements = edgeless.service.selection.selectedElements;
       currentController.updateDragPointsWith(selectedElements, 10);
       currentController.draggingAreaUpdated.emit(false); // do not show edgeless panel

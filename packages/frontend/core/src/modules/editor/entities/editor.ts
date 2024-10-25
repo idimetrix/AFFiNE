@@ -8,6 +8,7 @@ import type {
   DocTitle,
 } from '@blocksuite/affine/presets';
 import type { InlineEditor } from '@blocksuite/inline';
+import { effect } from '@preact/signals-core';
 import type { DocService, WorkspaceService } from '@toeverything/infra';
 import { Entity, LiveData } from '@toeverything/infra';
 import { defaults, isEqual, omit } from 'lodash-es';
@@ -39,7 +40,7 @@ export class Editor extends Entity {
       ) as EdgelessRootService;
     if (!edgelessRootService) return;
 
-    edgelessRootService.tool.setEdgelessTool({
+    edgelessRootService.gfx.tool.setTool({
       type: !this.isPresenting$.value ? 'frameNavigator' : 'default',
     });
   }
@@ -194,15 +195,15 @@ export class Editor extends Entity {
       this.isPresenting$.next(false);
     } else {
       this.isPresenting$.next(
-        edgelessPage.edgelessTool.type === 'frameNavigator'
+        edgelessPage.gfx.tool.currentToolName$.peek() === 'frameNavigator'
       );
 
-      const disposable = edgelessPage.slots.edgelessToolUpdated.on(() => {
+      const disposable = effect(() => {
         this.isPresenting$.next(
-          edgelessPage.edgelessTool.type === 'frameNavigator'
+          edgelessPage.gfx.tool.currentToolName$.value === 'frameNavigator'
         );
       });
-      unsubs.push(disposable.dispose.bind(disposable));
+      unsubs.push(disposable);
     }
 
     return () => {

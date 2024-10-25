@@ -1,6 +1,6 @@
 import type { EditorHost } from '@blocksuite/affine/block-std';
 import {
-  type CopilotSelectionController,
+  type CopilotTool,
   type FrameBlockModel,
   ImageBlockModel,
   type SurfaceBlockComponent,
@@ -279,7 +279,7 @@ export function getCopilotSelectedElems(
   const copilotWidget = getEdgelessCopilotWidget(host);
 
   if (copilotWidget.visible) {
-    return (service.tool.controllers['copilot'] as CopilotSelectionController)
+    return (service.gfx.tool.currentTool$.peek() as CopilotTool)
       .selectedElements;
   }
 
