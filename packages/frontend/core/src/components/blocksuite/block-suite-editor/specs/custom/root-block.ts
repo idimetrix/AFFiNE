@@ -9,7 +9,9 @@ import {
   type ExtensionType,
 } from '@blocksuite/affine/block-std';
 import {
+  EdgelessBuiltInManager,
   EdgelessRootBlockSpec,
+  EdgelessToolExtension,
   EditorSettingExtension,
   FontLoaderService,
   PageRootBlockSpec,
@@ -74,6 +76,8 @@ export function createEdgelessRootBlockSpec(
   return [
     enableAI ? AIEdgelessRootBlockSpec : EdgelessRootBlockSpec,
     FontLoaderService,
+    EdgelessToolExtension,
+    EdgelessBuiltInManager,
     getFontConfigExtension(),
     getTelemetryExtension(),
     getEditorConfigExtension(framework),
