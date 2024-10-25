@@ -5,7 +5,7 @@ import { appSettingAtom } from '@toeverything/infra';
 import type { createStore } from 'jotai';
 import type { useTheme } from 'next-themes';
 
-import type { EditorSettingService } from '../modules/editor-settting';
+import type { EditorSettingService } from '../modules/editor-setting';
 import { registerAffineCommand } from './registry';
 
 export function registerAffineSettingsCommands({

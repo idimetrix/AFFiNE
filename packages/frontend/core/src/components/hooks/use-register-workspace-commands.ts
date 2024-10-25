@@ -1,8 +1,13 @@
 import { AppSidebarService } from '@affine/core/modules/app-sidebar';
+import { DesktopApiService } from '@affine/core/modules/desktop-api/service';
 import { I18nService } from '@affine/core/modules/i18n';
 import { useI18n } from '@affine/i18n';
 import type { AffineEditorContainer } from '@blocksuite/affine/presets';
-import { useService, WorkspaceService } from '@toeverything/infra';
+import {
+  useService,
+  useServiceOptional,
+  WorkspaceService,
+} from '@toeverything/infra';
 import { useStore } from 'jotai';
 import { useTheme } from 'next-themes';
 import { useEffect } from 'react';
@@ -20,7 +25,7 @@ import {
 } from '../../commands';
 import { usePageHelper } from '../../components/blocksuite/block-suite-page-list/utils';
 import { CreateWorkspaceDialogService } from '../../modules/create-workspace';
-import { EditorSettingService } from '../../modules/editor-settting';
+import { EditorSettingService } from '../../modules/editor-setting';
 import { CMDKQuickSearchService } from '../../modules/quicksearch/services/cmdk';
 import { useActiveBlocksuiteEditor } from './use-block-suite-editor';
 import { useNavigateHelper } from './use-navigate-helper';
@@ -75,6 +80,9 @@ export function useRegisterWorkspaceCommands() {
   const appSidebarService = useService(AppSidebarService);
   const i18n = useService(I18nService).i18n;
 
+  const quitAndInstall =
+    useServiceOptional(DesktopApiService)?.handler.updater.quitAndInstall;
+
   useEffect(() => {
     const unsub = registerCMDKCommand(cmdkQuickSearchService, editor);
 
@@ -85,15 +93,20 @@ export function useRegisterWorkspaceCommands() {
 
   // register AffineUpdatesCommands
   useEffect(() => {
+    if (!quitAndInstall) {
+      return;
+    }
+
     const unsub = registerAffineUpdatesCommands({
       store,
       t,
+      quitAndInstall,
     });
 
     return () => {
       unsub();
     };
-  }, [store, t]);
+  }, [quitAndInstall, store, t]);
 
   // register AffineNavigationCommands
   useEffect(() => {

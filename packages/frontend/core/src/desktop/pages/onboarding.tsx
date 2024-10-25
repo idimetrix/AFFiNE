@@ -1,5 +1,5 @@
-import { apis } from '@affine/electron-api';
-import { assertExists } from '@blocksuite/affine/global/utils';
+import { DesktopApiService } from '@affine/core/modules/desktop-api/service';
+import { useServiceOptional } from '@toeverything/infra';
 import { useCallback } from 'react';
 import { redirect } from 'react-router-dom';
 
@@ -25,18 +25,18 @@ export const loader = () => {
 export const Component = () => {
   const { jumpToIndex } = useNavigateHelper();
   const [, setOnboarding] = useAppConfigStorage('onBoarding');
+  const desktopApi = useServiceOptional(DesktopApiService);
 
   const openApp = useCallback(() => {
     if (BUILD_CONFIG.isElectron) {
-      assertExists(apis);
-      apis.ui.handleOpenMainApp().catch(err => {
+      desktopApi?.handler.ui.handleOpenMainApp().catch(err => {
         console.log('failed to open main app', err);
       });
     } else {
       jumpToIndex(RouteLogic.REPLACE);
       setOnboarding(false);
     }
-  }, [jumpToIndex, setOnboarding]);
+  }, [jumpToIndex, setOnboarding, desktopApi]);
 
   return <Onboarding onOpenApp={openApp} />;
 };

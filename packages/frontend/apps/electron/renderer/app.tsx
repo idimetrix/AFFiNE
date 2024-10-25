@@ -6,6 +6,7 @@ import { Telemetry } from '@affine/core/components/telemetry';
 import { router } from '@affine/core/desktop/router';
 import { configureCommonModules } from '@affine/core/modules';
 import { configureAppTabsHeaderModule } from '@affine/core/modules/app-tabs-header';
+import { configureDesktopApiModule } from '@affine/core/modules/desktop-api';
 import { I18nProvider } from '@affine/core/modules/i18n';
 import { configureElectronStateStorageImpls } from '@affine/core/modules/storage';
 import { CustomThemeModifier } from '@affine/core/modules/theme-editor';
@@ -25,6 +26,8 @@ import {
 } from '@toeverything/infra';
 import { Suspense } from 'react';
 import { RouterProvider } from 'react-router-dom';
+
+import { DesktopThemeSync } from './theme-sync';
 
 const desktopWhiteList = [
   '/open-app/signin-redirect',
@@ -58,6 +61,7 @@ configureSqliteWorkspaceEngineStorageProvider(framework);
 configureSqliteUserspaceStorageProvider(framework);
 configureDesktopWorkbenchModule(framework);
 configureAppTabsHeaderModule(framework);
+configureDesktopApiModule(framework);
 const frameworkProvider = framework.provider();
 
 // setup application lifecycle events, and emit application start event
@@ -73,6 +77,7 @@ export function App() {
         <CacheProvider value={cache}>
           <I18nProvider>
             <AffineContext store={getCurrentStore()}>
+              <DesktopThemeSync />
               <Telemetry />
               <CustomThemeModifier />
               <GlobalLoading />

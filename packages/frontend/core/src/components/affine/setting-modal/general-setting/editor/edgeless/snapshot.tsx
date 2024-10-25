@@ -1,6 +1,6 @@
 import { Skeleton } from '@affine/component';
-import type { EditorSettingSchema } from '@affine/core/modules/editor-settting';
-import { EditorSettingService } from '@affine/core/modules/editor-settting';
+import type { EditorSettingSchema } from '@affine/core/modules/editor-setting';
+import { EditorSettingService } from '@affine/core/modules/editor-setting';
 import type { EditorHost } from '@blocksuite/affine/block-std';
 import { BlockStdScope } from '@blocksuite/affine/block-std';
 import type { GfxPrimitiveElementModel } from '@blocksuite/affine/block-std/gfx';

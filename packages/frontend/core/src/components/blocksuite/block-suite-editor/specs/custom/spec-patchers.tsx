@@ -8,7 +8,7 @@ import {
   type useConfirmModal,
 } from '@affine/component';
 import type { EditorService } from '@affine/core/modules/editor';
-import { EditorSettingService } from '@affine/core/modules/editor-settting';
+import { EditorSettingService } from '@affine/core/modules/editor-setting';
 import { resolveLinkToDoc } from '@affine/core/modules/navigation';
 import type { PeekViewService } from '@affine/core/modules/peek-view';
 import type { ActivePeekView } from '@affine/core/modules/peek-view/entities/peek-view';

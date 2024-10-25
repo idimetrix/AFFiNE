@@ -1,4 +1,4 @@
-import { EditorSettingService } from '@affine/core/modules/editor-settting';
+import { EditorSettingService } from '@affine/core/modules/editor-setting';
 import { JournalService } from '@affine/core/modules/journal';
 import { i18nTime } from '@affine/i18n';
 import { track } from '@affine/track';

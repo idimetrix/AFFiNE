@@ -56,6 +56,8 @@ export const appInfo = {
   scheme,
 };
 
+export type AppInfo = typeof appInfo;
+
 function getMainAPIs() {
   const meta: ExposedMeta = (() => {
     const val = process.argv

@@ -1,3 +1,4 @@
+// todo(@pengx17): remove jotai
 import type { UpdateMeta } from '@affine/electron-api';
 import { apis, events } from '@affine/electron-api';
 import { track } from '@affine/track';

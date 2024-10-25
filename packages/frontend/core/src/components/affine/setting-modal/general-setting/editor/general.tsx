@@ -20,7 +20,7 @@ import {
   EditorSettingService,
   type FontFamily,
   fontStyleOptions,
-} from '@affine/core/modules/editor-settting';
+} from '@affine/core/modules/editor-setting';
 import {
   type FontData,
   SystemFontFamilyService,

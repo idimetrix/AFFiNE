@@ -1,6 +1,10 @@
-import { apis } from '@affine/electron-api';
+import { DesktopApiService } from '@affine/core/modules/desktop-api/service';
 import { Turnstile } from '@marsidev/react-turnstile';
-import { useLiveData, useService } from '@toeverything/infra';
+import {
+  useLiveData,
+  useService,
+  useServiceOptional,
+} from '@toeverything/infra';
 import { atom, useAtom, useSetAtom } from 'jotai';
 import { useEffect, useRef } from 'react';
 import useSWR from 'swr';
@@ -28,14 +32,6 @@ const challengeFetcher = async (url: string) => {
   }
 
   return challenge;
-};
-
-const generateChallengeResponse = async (challenge: string) => {
-  if (!BUILD_CONFIG.isElectron) {
-    return undefined;
-  }
-
-  return await apis?.ui?.getChallengeResponse(challenge);
 };
 
 const captchaAtom = atom<string | undefined>(undefined);
@@ -88,21 +84,24 @@ export const useCaptcha = (): [string | undefined, string?, (() => void)?] => {
   );
   const prevChallenge = useRef('');
 
+  const desktopApi = useServiceOptional(DesktopApiService);
+
   useEffect(() => {
     if (
-      BUILD_CONFIG.isElectron &&
+      desktopApi &&
       hasCaptchaFeature &&
       challenge?.challenge &&
       prevChallenge.current !== challenge.challenge
     ) {
       prevChallenge.current = challenge.challenge;
-      generateChallengeResponse(challenge.resource)
+      desktopApi.handler.ui
+        .getChallengeResponse(challenge.resource)
         .then(setResponse)
         .catch(err => {
           console.error('Error getting challenge response:', err);
         });
     }
-  }, [challenge, hasCaptchaFeature, setResponse]);
+  }, [challenge, desktopApi, hasCaptchaFeature, setResponse]);
 
   if (!hasCaptchaFeature) {
     return ['XXXX.DUMMY.TOKEN.XXXX'];

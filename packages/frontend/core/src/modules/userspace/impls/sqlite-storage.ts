@@ -1,4 +1,4 @@
-import { apis } from '@affine/electron-api';
+import type { ClientHandler } from '@affine/electron-api';
 import type {
   ByteKV,
   ByteKVBehavior,
@@ -7,6 +7,7 @@ import type {
   DocStorage,
 } from '@toeverything/infra';
 import { AsyncLock } from '@toeverything/infra';
+import type { DesktopApiService } from '../../desktop-api';
 
 class BroadcastChannelDocEventBus implements DocEventBus {
   senderChannel = new BroadcastChannel('user-db:' + this.userId);
@@ -29,22 +30,26 @@ class BroadcastChannelDocEventBus implements DocEventBus {
 }
 
 export class SqliteUserspaceDocStorage implements DocStorage {
-  constructor(private readonly userId: string) {}
+  constructor(
+    private readonly userId: string,
+    private readonly electronApi: DesktopApiService
+  ) {}
   eventBus = new BroadcastChannelDocEventBus(this.userId);
-  readonly doc = new Doc(this.userId);
-  readonly syncMetadata = new SyncMetadataKV(this.userId);
-  readonly serverClock = new ServerClockKV(this.userId);
+  readonly doc = new Doc(this.userId, this.electronApi);
+  readonly syncMetadata = new SyncMetadataKV(this.userId, this.electronApi);
+  readonly serverClock = new ServerClockKV(this.userId, this.electronApi);
 }
 
 type DocType = DocStorage['doc'];
 
 class Doc implements DocType {
   lock = new AsyncLock();
-  constructor(private readonly userId: string) {
-    if (!apis?.db) {
-      throw new Error('sqlite datasource is not available');
-    }
-  }
+  apis = this.electronApi.api.handler;
+
+  constructor(
+    private readonly userId: string,
+    private readonly electronApi: DesktopApiService
+  ) {}
 
   async transaction<T>(
     cb: (transaction: ByteKVBehavior) => Promise<T>
@@ -58,10 +63,7 @@ class Doc implements DocType {
   }
 
   async get(docId: string) {
-    if (!apis?.db) {
-      throw new Error('sqlite datasource is not available');
-    }
-    const update = await apis.db.getDocAsUpdates(
+    const update = await this.apis.db.getDocAsUpdates(
       'userspace',
       this.userId,
       docId
@@ -82,10 +84,7 @@ class Doc implements DocType {
   }
 
   async set(docId: string, data: Uint8Array) {
-    if (!apis?.db) {
-      throw new Error('sqlite datasource is not available');
-    }
-    await apis.db.applyDocUpdate('userspace', this.userId, data, docId);
+    await this.apis.db.applyDocUpdate('userspace', this.userId, data, docId);
   }
 
   clear(): void | Promise<void> {
@@ -93,93 +92,68 @@ class Doc implements DocType {
   }
 
   async del(docId: string) {
-    if (!apis?.db) {
-      throw new Error('sqlite datasource is not available');
-    }
-    await apis.db.deleteDoc('userspace', this.userId, docId);
+    await this.apis.db.deleteDoc('userspace', this.userId, docId);
   }
 }
 
 class SyncMetadataKV implements ByteKV {
-  constructor(private readonly userId: string) {}
+  apis = this.electronApi.api.handler;
+  constructor(
+    private readonly userId: string,
+    private readonly electronApi: DesktopApiService
+  ) {}
   transaction<T>(cb: (behavior: ByteKVBehavior) => Promise<T>): Promise<T> {
     return cb(this);
   }
 
   get(key: string): Uint8Array | null | Promise<Uint8Array | null> {
-    if (!apis?.db) {
-      throw new Error('sqlite datasource is not available');
-    }
-    return apis.db.getSyncMetadata('userspace', this.userId, key);
+    return this.apis.db.getSyncMetadata('userspace', this.userId, key);
   }
 
   set(key: string, data: Uint8Array): void | Promise<void> {
-    if (!apis?.db) {
-      throw new Error('sqlite datasource is not available');
-    }
-    return apis.db.setSyncMetadata('userspace', this.userId, key, data);
+    return this.apis.db.setSyncMetadata('userspace', this.userId, key, data);
   }
 
   keys(): string[] | Promise<string[]> {
-    if (!apis?.db) {
-      throw new Error('sqlite datasource is not available');
-    }
-    return apis.db.getSyncMetadataKeys('userspace', this.userId);
+    return this.apis.db.getSyncMetadataKeys('userspace', this.userId);
   }
 
   del(key: string): void | Promise<void> {
-    if (!apis?.db) {
-      throw new Error('sqlite datasource is not available');
-    }
-    return apis.db.delSyncMetadata('userspace', this.userId, key);
+    return this.apis.db.delSyncMetadata('userspace', this.userId, key);
   }
 
   clear(): void | Promise<void> {
-    if (!apis?.db) {
-      throw new Error('sqlite datasource is not available');
-    }
-    return apis.db.clearSyncMetadata('userspace', this.userId);
+    return this.apis.db.clearSyncMetadata('userspace', this.userId);
   }
 }
 
 class ServerClockKV implements ByteKV {
-  constructor(private readonly userId: string) {}
+  apis = this.electronApi.api.handler;
+  constructor(
+    private readonly userId: string,
+    private readonly electronApi: DesktopApiService
+  ) {}
   transaction<T>(cb: (behavior: ByteKVBehavior) => Promise<T>): Promise<T> {
     return cb(this);
   }
 
   get(key: string): Uint8Array | null | Promise<Uint8Array | null> {
-    if (!apis?.db) {
-      throw new Error('sqlite datasource is not available');
-    }
-    return apis.db.getServerClock('userspace', this.userId, key);
+    return this.apis.db.getServerClock('userspace', this.userId, key);
   }
 
   set(key: string, data: Uint8Array): void | Promise<void> {
-    if (!apis?.db) {
-      throw new Error('sqlite datasource is not available');
-    }
-    return apis.db.setServerClock('userspace', this.userId, key, data);
+    return this.apis.db.setServerClock('userspace', this.userId, key, data);
   }
 
   keys(): string[] | Promise<string[]> {
-    if (!apis?.db) {
-      throw new Error('sqlite datasource is not available');
-    }
-    return apis.db.getServerClockKeys('userspace', this.userId);
+    return this.apis.db.getServerClockKeys('userspace', this.userId);
   }
 
   del(key: string): void | Promise<void> {
-    if (!apis?.db) {
-      throw new Error('sqlite datasource is not available');
-    }
-    return apis.db.delServerClock('userspace', this.userId, key);
+    return this.apis.db.delServerClock('userspace', this.userId, key);
   }
 
   clear(): void | Promise<void> {
-    if (!apis?.db) {
-      throw new Error('sqlite datasource is not available');
-    }
-    return apis.db.clearServerClock('userspace', this.userId);
+    return this.apis.db.clearServerClock('userspace', this.userId);
   }
 }

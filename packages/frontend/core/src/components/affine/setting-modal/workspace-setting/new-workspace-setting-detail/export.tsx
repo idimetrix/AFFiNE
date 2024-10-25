@@ -3,9 +3,13 @@ import { SettingRow } from '@affine/component/setting-components';
 import { Button } from '@affine/component/ui/button';
 import { useAsyncCallback } from '@affine/core/components/hooks/affine-async-hooks';
 import { useSystemOnline } from '@affine/core/components/hooks/use-system-online';
-import { apis } from '@affine/electron-api';
+import { DesktopApiService } from '@affine/core/modules/desktop-api/service';
 import { useI18n } from '@affine/i18n';
-import type { Workspace, WorkspaceMetadata } from '@toeverything/infra';
+import {
+  useService,
+  type Workspace,
+  type WorkspaceMetadata,
+} from '@toeverything/infra';
 import { useState } from 'react';
 
 interface ExportPanelProps {
@@ -13,7 +17,7 @@ interface ExportPanelProps {
   workspace: Workspace | null;
 }
 
-export const ExportPanel = ({
+export const DesktopExportPanel = ({
   workspaceMetadata,
   workspace,
 }: ExportPanelProps) => {
@@ -21,6 +25,7 @@ export const ExportPanel = ({
   const t = useI18n();
   const [saving, setSaving] = useState(false);
   const isOnline = useSystemOnline();
+  const desktopApi = useService(DesktopApiService);
 
   const onExport = useAsyncCallback(async () => {
     if (saving || !workspace) {
@@ -33,7 +38,7 @@ export const ExportPanel = ({
         await workspace.engine.blob.sync();
       }
 
-      const result = await apis?.dialog.saveDBFileAs(workspaceId);
+      const result = await desktopApi.handler.dialog.saveDBFileAs(workspaceId);
       if (result?.error) {
         throw new Error(result.error);
       } else if (!result?.canceled) {
@@ -44,7 +49,7 @@ export const ExportPanel = ({
     } finally {
       setSaving(false);
     }
-  }, [isOnline, saving, t, workspace, workspaceId]);
+  }, [isOnline, saving, t, workspace, workspaceId, desktopApi]);
 
   return (
     <SettingRow name={t['Export']()} desc={t['Export Description']()}>

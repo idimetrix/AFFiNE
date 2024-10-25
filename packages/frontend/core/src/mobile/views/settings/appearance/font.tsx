@@ -2,7 +2,7 @@ import { getBaseFontStyleOptions } from '@affine/core/components/affine/setting-
 import {
   EditorSettingService,
   type FontFamily,
-} from '@affine/core/modules/editor-settting';
+} from '@affine/core/modules/editor-setting';
 import { useI18n } from '@affine/i18n';
 import { useLiveData, useService } from '@toeverything/infra';
 import { useCallback, useMemo } from 'react';

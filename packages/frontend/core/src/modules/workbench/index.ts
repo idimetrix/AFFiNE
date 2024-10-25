@@ -16,6 +16,7 @@ import {
   WorkspaceScope,
 } from '@toeverything/infra';
 
+import { DesktopApiService } from '../desktop-api';
 import { SidebarTab } from './entities/sidebar-tab';
 import { View } from './entities/view';
 import { Workbench } from './entities/workbench';
@@ -59,7 +60,10 @@ export function configureDesktopWorkbenchModule(services: Framework) {
     .scope(WorkspaceScope)
     .impl(WorkbenchDefaultState, DesktopWorkbenchDefaultState, [
       GlobalStateService,
+      DesktopApiService,
     ])
-    .impl(WorkbenchNewTabHandler, () => DesktopWorkbenchNewTabHandler)
-    .service(DesktopStateSynchronizer, [WorkbenchService]);
+    .impl(WorkbenchNewTabHandler, DesktopWorkbenchNewTabHandler, [
+      DesktopApiService,
+    ])
+    .service(DesktopStateSynchronizer, [WorkbenchService, DesktopApiService]);
 }

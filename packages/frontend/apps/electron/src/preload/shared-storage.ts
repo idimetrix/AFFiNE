@@ -94,3 +94,5 @@ export const sharedStorage = {
   globalState,
   globalCache,
 };
+
+export type SharedStorage = typeof sharedStorage;

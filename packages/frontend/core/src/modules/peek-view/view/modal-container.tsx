@@ -13,7 +13,7 @@ import {
   useState,
 } from 'react';
 
-import { EditorSettingService } from '../../editor-settting';
+import { EditorSettingService } from '../../editor-setting';
 import type { PeekViewAnimation, PeekViewMode } from '../entities/peek-view';
 import * as styles from './modal-container.css';
 

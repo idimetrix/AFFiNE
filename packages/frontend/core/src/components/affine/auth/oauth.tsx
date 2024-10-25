@@ -1,10 +1,14 @@
 import { Skeleton } from '@affine/component';
 import { Button } from '@affine/component/ui/button';
+import { DesktopApiService } from '@affine/core/modules/desktop-api/service';
 import { popupWindow } from '@affine/core/utils';
-import { appInfo } from '@affine/electron-api';
 import { OAuthProviderType } from '@affine/graphql';
 import { GithubIcon, GoogleDuotoneIcon } from '@blocksuite/icons/rc';
-import { useLiveData, useService } from '@toeverything/infra';
+import {
+  useLiveData,
+  useService,
+  useServiceOptional,
+} from '@toeverything/infra';
 import { type ReactElement, useCallback } from 'react';
 
 import { ServerConfigService } from '../../../modules/cloud';
@@ -57,6 +61,7 @@ function OAuthProvider({
   redirectUrl?: string;
 }) {
   const { icon } = OAuthProviderMap[provider];
+  const appInfo = useServiceOptional(DesktopApiService)?.appInfo;
 
   const onClick = useCallback(() => {
     const params = new URLSearchParams();
@@ -77,7 +82,7 @@ function OAuthProvider({
         : '') + `/oauth/login?${params.toString()}`;
 
     popupWindow(oauthUrl);
-  }, [provider, redirectUrl]);
+  }, [appInfo, provider, redirectUrl]);
 
   return (
     <Button

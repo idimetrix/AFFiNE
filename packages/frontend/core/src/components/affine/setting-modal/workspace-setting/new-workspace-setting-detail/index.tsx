@@ -13,7 +13,7 @@ import { useCallback } from 'react';
 
 import { DeleteLeaveWorkspace } from './delete-leave-workspace';
 import { EnableCloudPanel } from './enable-cloud';
-import { ExportPanel } from './export';
+import { DesktopExportPanel } from './export';
 import { LabelsPanel } from './labels';
 import { MembersPanel } from './members';
 import { ProfilePanel } from './profile';
@@ -71,7 +71,7 @@ export const WorkspaceSettingDetail = ({
       <SharingPanel />
       {BUILD_CONFIG.isElectron && (
         <SettingWrapper title={t['Storage and Export']()}>
-          <ExportPanel
+          <DesktopExportPanel
             workspace={workspace}
             workspaceMetadata={workspaceMetadata}
           />

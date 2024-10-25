@@ -6,6 +6,7 @@ import {
   AppTabsHeader,
   configureAppTabsHeaderModule,
 } from '@affine/core/modules/app-tabs-header';
+import { configureDesktopApiModule } from '@affine/core/modules/desktop-api';
 import { configureI18nModule, I18nProvider } from '@affine/core/modules/i18n';
 import { configureElectronStateStorageImpls } from '@affine/core/modules/storage';
 import { SplitViewFallback } from '@affine/core/modules/workbench/view/split-view/split-view';
@@ -23,6 +24,7 @@ configureElectronStateStorageImpls(framework);
 configureAppTabsHeaderModule(framework);
 configureAppSidebarModule(framework);
 configureI18nModule(framework);
+configureDesktopApiModule(framework);
 const frameworkProvider = framework.provider();
 
 export function App() {

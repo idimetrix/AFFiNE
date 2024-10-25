@@ -1,6 +1,6 @@
 import { MenuItem, MenuTrigger, Slider } from '@affine/component';
 import { SettingRow } from '@affine/component/setting-components';
-import { EditorSettingService } from '@affine/core/modules/editor-settting';
+import { EditorSettingService } from '@affine/core/modules/editor-setting';
 import { useI18n } from '@affine/i18n';
 import { LineColor, LineColorMap } from '@blocksuite/affine/blocks';
 import type { Doc } from '@blocksuite/affine/store';

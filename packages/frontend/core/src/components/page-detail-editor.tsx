@@ -11,7 +11,7 @@ import { EditorService } from '../modules/editor';
 import {
   EditorSettingService,
   fontStyleOptions,
-} from '../modules/editor-settting';
+} from '../modules/editor-setting';
 import { BlockSuiteEditor as Editor } from './blocksuite/block-suite-editor';
 import * as styles from './page-detail-editor.css';
 

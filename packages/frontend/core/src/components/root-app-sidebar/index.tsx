@@ -21,7 +21,6 @@ import {
 import { ExplorerTags } from '@affine/core/modules/explorer/views/sections/tags';
 import { CMDKQuickSearchService } from '@affine/core/modules/quicksearch/services/cmdk';
 import { isNewTabTrigger } from '@affine/core/utils';
-import { apis, events } from '@affine/electron-api';
 import { useI18n } from '@affine/i18n';
 import { track } from '@affine/track';
 import type { Doc } from '@blocksuite/affine/store';
@@ -39,7 +38,7 @@ import {
 } from '@toeverything/infra';
 import { useSetAtom } from 'jotai';
 import type { MouseEvent, ReactElement } from 'react';
-import { useCallback, useEffect } from 'react';
+import { useCallback } from 'react';
 
 import { WorkbenchService } from '../../modules/workbench';
 import { usePageHelper } from '../blocksuite/block-suite-page-list/utils';
@@ -104,25 +103,6 @@ export const RootAppSidebar = (): ReactElement => {
     },
     [pageHelper]
   );
-
-  useEffect(() => {
-    if (BUILD_CONFIG.isElectron) {
-      return events?.applicationMenu.onNewPageAction(() => {
-        apis?.ui
-          .isActiveTab()
-          .then(isActive => {
-            if (!isActive) {
-              return;
-            }
-            onClickNewPage();
-          })
-          .catch(err => {
-            console.error(err);
-          });
-      });
-    }
-    return;
-  }, [onClickNewPage]);
 
   const setOpenSettingModalAtom = useSetAtom(openSettingModalAtom);
 

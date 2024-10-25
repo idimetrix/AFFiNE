@@ -3,7 +3,7 @@ import { Text } from '@blocksuite/affine/store';
 import type { DocProps, DocsService } from '@toeverything/infra';
 import { Service } from '@toeverything/infra';
 
-import { EditorSettingService } from '../../editor-settting';
+import { EditorSettingService } from '../../editor-setting';
 import type { WorkbenchService } from '../../workbench';
 import { CollectionsQuickSearchSession } from '../impls/collections';
 import { CommandsQuickSearchSession } from '../impls/commands';

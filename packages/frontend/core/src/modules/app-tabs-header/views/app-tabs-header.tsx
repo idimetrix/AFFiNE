@@ -10,7 +10,6 @@ import {
 import { useAsyncCallback } from '@affine/core/components/hooks/affine-async-hooks';
 import { useCatchEventCallback } from '@affine/core/components/hooks/use-catch-event-hook';
 import type { AffineDNDData } from '@affine/core/types/dnd';
-import { apis, events } from '@affine/electron-api';
 import { useI18n } from '@affine/i18n';
 import { track } from '@affine/track';
 import { CloseIcon, PlusIcon, RightSidebarIcon } from '@blocksuite/icons/rc';
@@ -31,6 +30,7 @@ import {
 } from 'react';
 
 import { AppSidebarService } from '../../app-sidebar';
+import { DesktopApiService } from '../../desktop-api';
 import { iconNameToIcon } from '../../workbench/constants';
 import { DesktopStateSynchronizer } from '../../workbench/services/desktop-state-synchronizer';
 import {
@@ -274,17 +274,18 @@ const WorkbenchTab = ({
 };
 
 const useIsFullScreen = () => {
+  const desktopApi = useServiceOptional(DesktopApiService);
   const [fullScreen, setFullScreen] = useState(false);
 
   useEffect(() => {
-    apis?.ui
+    desktopApi?.handler.ui
       .isFullScreen()
       .then(setFullScreen)
       .then(() => {
-        events?.ui.onFullScreen(setFullScreen);
+        desktopApi?.events.ui.onFullScreen(setFullScreen);
       })
       .catch(console.error);
-  }, []);
+  }, [desktopApi?.events.ui, desktopApi?.handler.ui]);
   return fullScreen;
 };
 
@@ -309,6 +310,8 @@ export const AppTabsHeader = ({
   const isWindowsDesktop = BUILD_CONFIG.isElectron && environment.isWindows;
   const fullScreen = useIsFullScreen();
 
+  const desktopApi = useService(DesktopApiService);
+
   const tabsHeaderService = useService(AppTabsHeaderService);
   const tabs = useLiveData(tabsHeaderService.tabsStatus$);
 
@@ -328,9 +331,9 @@ export const AppTabsHeader = ({
 
   useEffect(() => {
     if (mode === 'app') {
-      apis?.ui.pingAppLayoutReady().catch(console.error);
+      desktopApi.handler.ui.pingAppLayoutReady().catch(console.error);
     }
-  }, [mode]);
+  }, [mode, desktopApi]);
 
   const onDrop = useAsyncCallback(
     async (data: DropTargetDropEvent<AffineDNDData>, targetId?: string) => {

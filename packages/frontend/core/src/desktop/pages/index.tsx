@@ -1,8 +1,9 @@
-import { apis } from '@affine/electron-api';
+import { DesktopApiService } from '@affine/core/modules/desktop-api/service';
 import { WorkspaceFlavour } from '@affine/env/workspace';
 import {
   useLiveData,
   useService,
+  useServiceOptional,
   WorkspacesService,
 } from '@toeverything/infra';
 import {
@@ -118,9 +119,11 @@ export const Component = ({
     defaultIndexRoute,
   ]);
 
+  const desktopApi = useServiceOptional(DesktopApiService);
+
   useEffect(() => {
-    apis?.ui.pingAppLayoutReady().catch(console.error);
-  }, []);
+    desktopApi?.handler.ui.pingAppLayoutReady().catch(console.error);
+  }, [desktopApi]);
 
   useEffect(() => {
     setCreating(true);

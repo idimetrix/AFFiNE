@@ -1,10 +1,14 @@
 import { Button } from '@affine/component';
 import { SettingRow } from '@affine/component/setting-components';
+import { DesktopApiService } from '@affine/core/modules/desktop-api/service';
 import { ThemeEditorService } from '@affine/core/modules/theme-editor';
 import { popupWindow } from '@affine/core/utils';
-import { apis } from '@affine/electron-api';
 import { DeleteIcon } from '@blocksuite/icons/rc';
-import { useLiveData, useService } from '@toeverything/infra';
+import {
+  useLiveData,
+  useService,
+  useServiceOptional,
+} from '@toeverything/infra';
 import { cssVar } from '@toeverything/theme';
 import { useCallback } from 'react';
 
@@ -12,13 +16,15 @@ export const ThemeEditorSetting = () => {
   const themeEditor = useService(ThemeEditorService);
   const modified = useLiveData(themeEditor.modified$);
 
+  const desktopApi = useServiceOptional(DesktopApiService);
+
   const open = useCallback(() => {
-    if (BUILD_CONFIG.isElectron) {
-      apis?.ui.openThemeEditor().catch(console.error);
+    if (desktopApi) {
+      desktopApi.handler.ui.openThemeEditor().catch(console.error);
     } else {
       popupWindow('/theme-editor');
     }
-  }, []);
+  }, [desktopApi]);
 
   return (
     <SettingRow

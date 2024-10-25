@@ -4,7 +4,6 @@ import { CloudSvg } from '@affine/core/components/affine/share-page-modal/cloud-
 import { authAtom } from '@affine/core/components/atoms';
 import { useAsyncCallback } from '@affine/core/components/hooks/affine-async-hooks';
 import { DebugLogger } from '@affine/debug';
-import { apis } from '@affine/electron-api';
 import { WorkspaceFlavour } from '@affine/env/workspace';
 import { useI18n } from '@affine/i18n';
 import { track } from '@affine/track';
@@ -12,6 +11,7 @@ import {
   FeatureFlagService,
   useLiveData,
   useService,
+  useServiceOptional,
   WorkspacesService,
 } from '@toeverything/infra';
 import { useSetAtom } from 'jotai';
@@ -20,6 +20,7 @@ import { useCallback, useLayoutEffect, useState } from 'react';
 import { AuthService } from '../../../modules/cloud';
 import { _addLocalWorkspace } from '../../../modules/workspace-engine';
 import { buildShowcaseWorkspace } from '../../../utils/first-app-data';
+import { DesktopApiService } from '../../desktop-api';
 import { CreateWorkspaceDialogService } from '../services/dialog';
 import * as styles from './dialog.css';
 
@@ -162,6 +163,7 @@ const CreateWorkspaceDialog = () => {
   const t = useI18n();
   const workspacesService = useService(WorkspacesService);
   const [loading, setLoading] = useState(false);
+  const electronApi = useServiceOptional(DesktopApiService);
 
   // TODO(@Peng): maybe refactor using xstate?
   useLayoutEffect(() => {
@@ -173,11 +175,11 @@ const CreateWorkspaceDialog = () => {
       // after it is done, it will effectively add a new workspace to app-data folder
       // so after that, we will be able to load it via importLocalWorkspace
       (async () => {
-        if (!apis) {
+        if (!electronApi) {
           return;
         }
         logger.info('load db file');
-        const result = await apis.dialog.loadDBFile();
+        const result = await electronApi.handler.dialog.loadDBFile();
         if (result.workspaceId && !canceled) {
           _addLocalWorkspace(result.workspaceId);
           workspacesService.list.revalidate();
@@ -201,7 +203,7 @@ const CreateWorkspaceDialog = () => {
     return () => {
       canceled = true;
     };
-  }, [createWorkspaceDialogService, mode, t, workspacesService]);
+  }, [createWorkspaceDialogService, electronApi, mode, t, workspacesService]);
 
   const onConfirmName = useAsyncCallback(
     async (name: string, workspaceFlavour: WorkspaceFlavour) => {

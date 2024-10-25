@@ -1,24 +1,28 @@
-import { apis } from '@affine/electron-api';
-import { assertExists } from '@blocksuite/affine/global/utils';
+import type { DesktopApiService } from '@affine/core/modules/desktop-api';
 import type { BlobStorage } from '@toeverything/infra';
 
 import { bufferToBlob } from '../../utils/buffer-to-blob';
 
 export class SqliteBlobStorage implements BlobStorage {
-  constructor(private readonly workspaceId: string) {}
+  constructor(
+    private readonly workspaceId: string,
+    private readonly electronApi: DesktopApiService
+  ) {}
   name = 'sqlite';
   readonly = false;
   async get(key: string) {
-    assertExists(apis);
-    const buffer = await apis.db.getBlob('workspace', this.workspaceId, key);
+    const buffer = await this.electronApi.handler.db.getBlob(
+      'workspace',
+      this.workspaceId,
+      key
+    );
     if (buffer) {
       return bufferToBlob(buffer);
     }
     return null;
   }
   async set(key: string, value: Blob) {
-    assertExists(apis);
-    await apis.db.addBlob(
+    await this.electronApi.handler.db.addBlob(
       'workspace',
       this.workspaceId,
       key,
@@ -27,11 +31,16 @@ export class SqliteBlobStorage implements BlobStorage {
     return key;
   }
   delete(key: string) {
-    assertExists(apis);
-    return apis.db.deleteBlob('workspace', this.workspaceId, key);
+    return this.electronApi.handler.db.deleteBlob(
+      'workspace',
+      this.workspaceId,
+      key
+    );
   }
   list() {
-    assertExists(apis);
-    return apis.db.getBlobKeys('workspace', this.workspaceId);
+    return this.electronApi.handler.db.getBlobKeys(
+      'workspace',
+      this.workspaceId
+    );
   }
 }

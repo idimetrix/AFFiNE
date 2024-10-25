@@ -1,5 +1,4 @@
 import { DebugLogger } from '@affine/debug';
-import { apis } from '@affine/electron-api';
 import { WorkspaceFlavour } from '@affine/env/workspace';
 import { DocCollection } from '@blocksuite/affine/store';
 import type {
@@ -20,6 +19,7 @@ import { nanoid } from 'nanoid';
 import { Observable } from 'rxjs';
 import { applyUpdate, encodeStateAsUpdate } from 'yjs';
 
+import { DesktopApiService } from '../../desktop-api';
 import type { WorkspaceEngineStorageProvider } from '../providers/engine';
 import { BroadcastChannelAwarenessConnection } from './engine/awareness-broadcast-channel';
 import { StaticBlobStorage } from './engine/blob-static';
@@ -72,8 +72,10 @@ export class LocalWorkspaceFlavourProvider
   async deleteWorkspace(id: string): Promise<void> {
     setLocalWorkspaceIds(ids => ids.filter(x => x !== id));
 
-    if (BUILD_CONFIG.isElectron && apis) {
-      await apis.workspace.delete(id);
+    const electronApi = this.framework.getOptional(DesktopApiService);
+
+    if (BUILD_CONFIG.isElectron && electronApi) {
+      await electronApi.handler.workspace.delete(id);
     }
 
     // notify all browser tabs, so they can update their workspace list

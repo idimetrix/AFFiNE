@@ -116,7 +116,7 @@ export class Workbench extends Entity {
       show?: boolean;
     } = {}
   ) {
-    this.newTabHandler({
+    this.newTabHandler.handle({
       basename: this.basename$.value,
       to,
       show: show ?? true,

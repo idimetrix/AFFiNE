@@ -1,8 +1,5 @@
-import { notify } from '@affine/component';
 import { AIProvider } from '@affine/core/blocksuite/presets/ai';
-import { apis, appInfo, events } from '@affine/electron-api';
 import type { OAuthProviderType } from '@affine/graphql';
-import { I18n } from '@affine/i18n';
 import { track } from '@affine/track';
 import {
   ApplicationFocused,
@@ -13,6 +10,7 @@ import {
 } from '@toeverything/infra';
 import { distinctUntilChanged, map, skip } from 'rxjs';
 
+import { DesktopApiProvider } from '../../desktop-api/provider';
 import { type AuthAccountInfo, AuthSession } from '../entities/session';
 import type { AuthStore } from '../stores/auth';
 import type { FetchService } from './fetch';
@@ -76,33 +74,6 @@ export class AuthService extends Service {
 
   private onApplicationStart() {
     this.session.revalidate();
-
-    if (BUILD_CONFIG.isElectron) {
-      events?.ui.onAuthenticationRequest(({ method, payload }) => {
-        (async () => {
-          if (!(await apis?.ui.isActiveTab())) {
-            return;
-          }
-          switch (method) {
-            case 'magic-link': {
-              const { email, token } = payload;
-              await this.signInMagicLink(email, token);
-              break;
-            }
-            case 'oauth': {
-              const { code, state, provider } = payload;
-              await this.signInOauth(code, state, provider);
-              break;
-            }
-          }
-        })().catch(e => {
-          notify.error({
-            title: I18n['com.affine.auth.toast.title.failed'](),
-            message: (e as any).message,
-          });
-        });
-      });
-    }
   }
 
   private onApplicationFocused() {
@@ -121,10 +92,8 @@ export class AuthService extends Service {
       if (redirectUrl) {
         magicLinkUrlParams.set('redirect_uri', redirectUrl);
       }
-      magicLinkUrlParams.set(
-        'client',
-        BUILD_CONFIG.isElectron && appInfo ? appInfo.scheme : 'web'
-      );
+      const appInfo = this.framework.getOptional(DesktopApiProvider)?.appInfo;
+      magicLinkUrlParams.set('client', appInfo?.scheme || 'web');
       await this.fetchService.fetch('/api/auth/sign-in', {
         method: 'POST',
         body: JSON.stringify({

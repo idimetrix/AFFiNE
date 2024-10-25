@@ -4,6 +4,7 @@ import {
   resolveGlobalLoadingEventAtom,
 } from '@affine/component/global-loading';
 import { SidebarSwitch } from '@affine/core/modules/app-sidebar/views';
+import { WorkspaceDesktopApiService } from '@affine/core/modules/desktop-api/service';
 import { useI18n } from '@affine/i18n';
 import { type DocMode, ZipTransformer } from '@blocksuite/affine/blocks';
 import {
@@ -33,7 +34,7 @@ import { Map as YMap } from 'yjs';
 
 import { AIProvider } from '../../blocksuite/presets/ai';
 import { AppTabsHeader } from '../../modules/app-tabs-header';
-import { EditorSettingService } from '../../modules/editor-settting';
+import { EditorSettingService } from '../../modules/editor-setting';
 import { NavigationButtons } from '../../modules/navigation';
 import { useRegisterNavigationCommands } from '../../modules/navigation/view/use-register-navigation-commands';
 import { QuickSearchContainer } from '../../modules/quicksearch';
@@ -179,6 +180,8 @@ export const WorkspaceLayoutProviders = ({ children }: PropsWithChildren) => {
 };
 
 const DesktopLayout = ({ children }: PropsWithChildren) => {
+  // is there a better way to make sure service is always available even if it's not explicitly used?
+  useService(WorkspaceDesktopApiService);
   return (
     <div className={styles.desktopAppViewContainer}>
       <div className={styles.desktopTabsHeader}>

@@ -3,6 +3,7 @@ export { UserspaceService as UserDBService } from './services/userspace';
 import type { Framework } from '@toeverything/infra';
 
 import { AuthService, WebSocketService } from '../cloud';
+import { DesktopApiService } from '../desktop-api';
 import { CurrentUserDB } from './entities/current-user-db';
 import { UserDB } from './entities/user-db';
 import { UserDBEngine } from './entities/user-db-engine';
@@ -32,9 +33,9 @@ export function configureIndexedDBUserspaceStorageProvider(
 }
 
 export function configureSqliteUserspaceStorageProvider(framework: Framework) {
-  framework.impl(UserspaceStorageProvider, {
+  framework.impl(UserspaceStorageProvider, p => ({
     getDocStorage(userId: string) {
-      return new SqliteUserspaceDocStorage(userId);
+      return new SqliteUserspaceDocStorage(userId, p.get(DesktopApiService));
     },
-  });
+  }));
 }

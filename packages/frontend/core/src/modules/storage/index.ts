@@ -1,5 +1,6 @@
 import { type Framework, GlobalCache, GlobalState } from '@toeverything/infra';
 
+import { DesktopApiService } from '../desktop-api';
 import { ElectronGlobalCache, ElectronGlobalState } from './impls/electron';
 import {
   LocalStorageGlobalCache,
@@ -12,6 +13,6 @@ export function configureLocalStorageStateStorageImpls(framework: Framework) {
 }
 
 export function configureElectronStateStorageImpls(framework: Framework) {
-  framework.impl(GlobalCache, ElectronGlobalCache);
-  framework.impl(GlobalState, ElectronGlobalState);
+  framework.impl(GlobalCache, ElectronGlobalCache, [DesktopApiService]);
+  framework.impl(GlobalState, ElectronGlobalState, [DesktopApiService]);
 }

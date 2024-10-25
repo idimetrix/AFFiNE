@@ -9,6 +9,7 @@ import {
   WorkspaceFlavourProvider,
 } from '@toeverything/infra';
 
+import { DesktopApiService } from '../desktop-api';
 import { CloudWorkspaceFlavourProviderService } from './impls/cloud';
 import { IndexedDBBlobStorage } from './impls/engine/blob-indexeddb';
 import { SqliteBlobStorage } from './impls/engine/blob-sqlite';
@@ -55,13 +56,16 @@ export function configureIndexedDBWorkspaceEngineStorageProvider(
 export function configureSqliteWorkspaceEngineStorageProvider(
   framework: Framework
 ) {
-  framework.impl(WorkspaceEngineStorageProvider, {
-    getDocStorage(workspaceId: string) {
-      return new SqliteDocStorage(workspaceId);
-    },
-    getBlobStorage(workspaceId: string) {
-      return new SqliteBlobStorage(workspaceId);
-    },
+  framework.impl(WorkspaceEngineStorageProvider, p => {
+    const electronApi = p.get(DesktopApiService);
+    return {
+      getDocStorage(workspaceId: string) {
+        return new SqliteDocStorage(workspaceId, electronApi);
+      },
+      getBlobStorage(workspaceId: string) {
+        return new SqliteBlobStorage(workspaceId, electronApi);
+      },
+    };
   });
 }
 

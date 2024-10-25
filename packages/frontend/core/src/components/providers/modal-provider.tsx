@@ -1,10 +1,11 @@
 import { NotificationCenter, notify } from '@affine/component';
-import { events } from '@affine/electron-api';
+import { DesktopApiService } from '@affine/core/modules/desktop-api/service';
 import { WorkspaceFlavour } from '@affine/env/workspace';
 import {
   GlobalContextService,
   useLiveData,
   useService,
+  useServiceOptional,
   WorkspaceService,
   WorkspacesService,
 } from '@toeverything/infra';
@@ -61,17 +62,16 @@ export const Setting = () => {
     [setOpenSettingModalAtom]
   );
 
+  const desktopApi = useServiceOptional(DesktopApiService);
+
   useEffect(() => {
-    if (BUILD_CONFIG.isElectron) {
-      return events?.applicationMenu.openAboutPageInSettingModal(() =>
-        setOpenSettingModalAtom({
-          activeTab: 'about',
-          open: true,
-        })
-      );
-    }
-    return;
-  }, [setOpenSettingModalAtom]);
+    return desktopApi?.events?.applicationMenu.openAboutPageInSettingModal(() =>
+      setOpenSettingModalAtom({
+        activeTab: 'about',
+        open: true,
+      })
+    );
+  }, [desktopApi?.events?.applicationMenu, setOpenSettingModalAtom]);
 
   if (!open) {
     return null;
