@@ -111,7 +111,7 @@ export const createConfiguration: (
           : 'js/[name].js',
       // In some cases webpack will emit files starts with "_" which is reserved in web extension.
       chunkFilename: pathData =>
-        pathData.chunk?.name?.endWith?.('worker')
+        pathData.chunk?.name?.endsWith?.('worker')
           ? 'js/[name].[contenthash:8].js'
           : buildFlags.mode === 'production'
             ? 'js/chunk.[name].[contenthash:8].js'

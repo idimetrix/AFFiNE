@@ -10,18 +10,15 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { Virtuoso, type VirtuosoHandle } from 'react-virtuoso';
+import type { VirtuosoHandle } from 'react-virtuoso';
+import { Virtuoso } from 'react-virtuoso';
 
 import { IconButton } from '../../ui/button';
 import { Scrollable } from '../../ui/scrollbar';
 import * as styles from './styles.css';
 // import { observeResize } from '../../utils';
-import {
-  type MessageData,
-  type MessageDataType,
-  MessageOp,
-  State,
-} from './worker/types';
+import type { MessageData, MessageDataType } from './worker/types';
+import { MessageOp, State } from './worker/types';
 
 const Page = React.memo(
   ({
@@ -255,7 +252,7 @@ export const Viewer = ({ model }: ViewerProps): ReactElement => {
 
   useEffect(() => {
     workerRef.current = new Worker(
-      /* webpackChunkName: "pdf-worker" */ new URL(
+      /* webpackChunkName: "pdf.worker" */ new URL(
         './worker/worker.ts',
         import.meta.url
       )

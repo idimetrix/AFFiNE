@@ -1,5 +1,8 @@
 import { AttachmentViewer } from '@affine/component/attachment-viewer';
-import { type AttachmentBlockModel, matchFlavours } from '@blocksuite/blocks';
+import {
+  type AttachmentBlockModel,
+  matchFlavours,
+} from '@blocksuite/affine/blocks';
 import {
   type Doc,
   DocsService,
