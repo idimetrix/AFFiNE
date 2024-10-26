@@ -1,6 +1,5 @@
 import { DebugLogger } from '@affine/debug';
-import type {
-  Document} from '@toeverything/pdf-viewer';
+import type { Document } from '@toeverything/pdf-viewer';
 import {
   createPDFium,
   PageRenderingflags,
@@ -8,12 +7,8 @@ import {
   Viewer,
 } from '@toeverything/pdf-viewer';
 
-import {
-  type MessageData,
-  type MessageDataType,
-  MessageOp,
-  State,
-} from './types';
+import type { MessageData, MessageDataType } from './types';
+import { MessageOp, State } from './types';
 
 const logger = new DebugLogger('affine:pdf-worker');
 
@@ -32,24 +27,25 @@ function post<T extends MessageOp>(type: T, data?: MessageDataType[T]) {
 
 async function resizeImageData(
   imageData: ImageData,
-  width: number,
-  height: number
+  options: {
+    resizeWidth: number;
+    resizeHeight: number;
+  }
 ) {
-  width = width >> 0;
-  height = height >> 0;
+  const { resizeWidth: w, resizeHeight: h } = options;
   const bitmap = await createImageBitmap(
     imageData,
     0,
     0,
     imageData.width,
     imageData.height,
-    { resizeWidth: width, resizeHeight: height }
+    options
   );
-  const canvas = new OffscreenCanvas(width, height);
+  const canvas = new OffscreenCanvas(w, h);
   const ctx = canvas.getContext('2d');
   if (!ctx) return imageData;
   ctx.drawImage(bitmap, 0, 0);
-  return ctx.getImageData(0, 0, width, height);
+  return ctx.getImageData(0, 0, w, h);
 }
 
 async function start() {
@@ -110,9 +106,13 @@ async function process({ data }: MessageEvent<MessageData>) {
       let imageData = cached.size > 0 ? cached.get(index) : undefined;
       if (imageData) {
         if (kind === 'thumbnail') {
-          const sw = Math.ceil(94 * dpi);
-          const sh = Math.ceil((docInfo.height / docInfo.width) * sw);
-          imageData = await resizeImageData(imageData, sw, sh);
+          const resizeWidth = (94 * dpi) >> 0;
+          const resizeHeight =
+            ((docInfo.height / docInfo.width) * resizeWidth) >> 0;
+          imageData = await resizeImageData(imageData, {
+            resizeWidth,
+            resizeHeight,
+          });
         }
 
         post(MessageOp.Rendered, { index, imageData, kind });
@@ -138,9 +138,13 @@ async function process({ data }: MessageEvent<MessageData>) {
         cached.set(index, imageData);
 
         if (kind === 'thumbnail') {
-          const sw = Math.ceil(94 * dpi);
-          const sh = Math.ceil((docInfo.height / docInfo.width) * sw);
-          imageData = await resizeImageData(imageData, sw, sh);
+          const resizeWidth = (94 * dpi) >> 0;
+          const resizeHeight =
+            ((docInfo.height / docInfo.width) * resizeWidth) >> 0;
+          imageData = await resizeImageData(imageData, {
+            resizeWidth,
+            resizeHeight,
+          });
         }
 
         post(MessageOp.Rendered, { index, imageData, kind });

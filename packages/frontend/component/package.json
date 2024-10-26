@@ -14,7 +14,7 @@
   },
   "peerDependencies": {
     "@blocksuite/affine": "*",
-    "@blocksuite/icons": "2.1.67"
+    "@blocksuite/icons": "*"
   },
   "dependencies": {
     "@affine/cli": "workspace:*",
@@ -24,6 +24,7 @@
     "@affine/i18n": "workspace:*",
     "@atlaskit/pragmatic-drag-and-drop": "^1.2.1",
     "@atlaskit/pragmatic-drag-and-drop-hitbox": "^1.0.3",
+    "@blocksuite/icons": "2.1.69",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
     "@radix-ui/react-avatar": "^1.0.4",
@@ -40,13 +41,14 @@
     "@radix-ui/react-toast": "^1.1.5",
     "@radix-ui/react-tooltip": "^1.0.7",
     "@radix-ui/react-visually-hidden": "^1.1.0",
-    "@toeverything/pdf-viewer": "workspace:*",
+    "@toeverything/pdf-viewer": "^0.1.0",
     "@toeverything/theme": "^1.0.11",
     "@vanilla-extract/dynamic": "^2.1.0",
     "check-password-strength": "^2.0.10",
     "clsx": "^2.1.0",
     "dayjs": "^1.11.10",
     "file-type": "^19.1.0",
+    "filesize": "^10.1.6",
     "jotai": "^2.8.0",
     "lit": "^3.1.2",
     "lodash-es": "^4.17.21",
@@ -66,7 +68,6 @@
   },
   "devDependencies": {
     "@blocksuite/affine": "0.0.0-canary-20241025100850",
-    "@blocksuite/icons": "2.1.69",
     "@chromatic-com/storybook": "^3.0.0",
     "@storybook/addon-essentials": "^8.2.9",
     "@storybook/addon-interactions": "^8.2.9",

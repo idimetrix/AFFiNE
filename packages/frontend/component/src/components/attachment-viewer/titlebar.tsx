@@ -37,7 +37,7 @@ export interface TitlebarProps {
   model: AttachmentBlockModel;
   name: string;
   ext: string;
-  filesize: string;
+  size: string;
   isPDF: boolean;
   zoom?: number;
 }
@@ -46,7 +46,7 @@ export const Titlebar = ({
   model: _,
   name,
   ext,
-  filesize,
+  size,
   zoom = 100,
   isPDF = false,
 }: TitlebarProps) => {
@@ -59,7 +59,7 @@ export const Titlebar = ({
           <div>{name}</div>
           <span>.{ext}</span>
         </div>
-        <div>{filesize}</div>
+        <div>{size}</div>
         <IconButton icon={<LocalDataIcon />}></IconButton>
         <Menu
           items={<MenuItems />}

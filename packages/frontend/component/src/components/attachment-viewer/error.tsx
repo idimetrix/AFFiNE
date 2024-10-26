@@ -1,7 +1,6 @@
 import type { AttachmentBlockModel } from '@blocksuite/blocks';
 import { ArrowDownBigIcon, PageIcon } from '@blocksuite/icons/rc';
 import clsx from 'clsx';
-import type { ReactElement } from 'react';
 
 import { Button } from '../../ui/button';
 import * as styles from './styles.css';
@@ -12,7 +11,7 @@ interface ErrorProps {
   isPDF: boolean;
 }
 
-export const Error = ({ ext }: ErrorProps): ReactElement => {
+export const Error = ({ ext }: ErrorProps) => {
   return (
     <div className={clsx([styles.body, styles.error])}>
       <PageIcon />

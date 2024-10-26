@@ -1,6 +1,6 @@
-import { humanFileSize } from '@blocksuite/affine-shared/utils';
 import type { AttachmentBlockModel } from '@blocksuite/blocks';
-import { type ReactElement, useMemo } from 'react';
+import { filesize } from 'filesize';
+import { useMemo } from 'react';
 
 import { Error } from './error';
 import * as styles from './styles.css';
@@ -11,16 +11,14 @@ export type AttachmentViewerProps = {
   model: AttachmentBlockModel;
 };
 
-export const AttachmentViewer = ({
-  model,
-}: AttachmentViewerProps): ReactElement => {
+export const AttachmentViewer = ({ model }: AttachmentViewerProps) => {
   const props = useMemo(() => {
     const pieces = model.name.split('.');
     const ext = pieces.pop() || '';
     const name = pieces.join('.');
     const isPDF = ext === 'pdf';
-    const filesize = humanFileSize(model.size);
-    return { model, name, ext, filesize, isPDF };
+    const size = filesize(model.size);
+    return { model, name, ext, size, isPDF };
   }, [model]);
 
   return (
