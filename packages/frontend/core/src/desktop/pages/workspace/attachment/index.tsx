@@ -47,7 +47,9 @@ const useLoadAttachment = (pageId?: string, attachmentId?: string) => {
 
     const disposable = doc.blockSuiteDoc.slots.blockUpdated
       .filter(({ type, id }) => type === 'add' && id === attachmentId)
+      // @ts-expect-error allow
       .filter(({ model }) => matchFlavours(model, ['affine:attachment']))
+      // @ts-expect-error allow
       .once(({ model }) => setModel(model as AttachmentBlockModel));
 
     return () => {

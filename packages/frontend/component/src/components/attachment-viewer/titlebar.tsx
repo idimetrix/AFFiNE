@@ -1,4 +1,4 @@
-import type { AttachmentBlockModel } from '@blocksuite/blocks';
+import type { AttachmentBlockModel } from '@blocksuite/affine/blocks';
 import {
   EditIcon,
   LocalDataIcon,
@@ -12,23 +12,28 @@ import { useState } from 'react';
 import { IconButton } from '../../ui/button';
 import { Menu, MenuItem } from '../../ui/menu';
 import * as styles from './styles.css';
+import { saveBufferToFile } from './utils';
 
 const items = [
   {
     name: 'Rename',
     icon: <EditIcon />,
-    action() {},
+    action(_model: AttachmentBlockModel) {},
   },
   {
     name: 'Download',
     icon: <LocalDataIcon />,
-    action() {},
+    action(model: AttachmentBlockModel) {
+      const { sourceId, name } = model;
+      if (!sourceId) return;
+      saveBufferToFile(sourceId, name).catch(console.error);
+    },
   },
 ];
 
-export const MenuItems = () =>
+export const MenuItems = ({ model }: { model: AttachmentBlockModel }) =>
   items.map(({ name, icon, action }) => (
-    <MenuItem key={name} onClick={action} prefixIcon={icon}>
+    <MenuItem key={name} onClick={() => action(model)} prefixIcon={icon}>
       {name}
     </MenuItem>
   ));
@@ -43,7 +48,7 @@ export interface TitlebarProps {
 }
 
 export const Titlebar = ({
-  model: _,
+  model,
   name,
   ext,
   size,
@@ -62,7 +67,7 @@ export const Titlebar = ({
         <div>{size}</div>
         <IconButton icon={<LocalDataIcon />}></IconButton>
         <Menu
-          items={<MenuItems />}
+          items={<MenuItems model={model} />}
           rootOptions={{
             open: openMenu,
             onOpenChange: setOpenMenu,

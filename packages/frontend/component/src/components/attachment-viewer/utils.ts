@@ -1,6 +1,6 @@
 import { fileTypeFromBuffer } from 'file-type';
 
-async function _saveBufferToFile(url: string, filename: string) {
+export async function saveBufferToFile(url: string, filename: string) {
   // given input url may not have correct mime type
   const blob = await attachmentUrlToBlob(url);
   if (!blob) {
