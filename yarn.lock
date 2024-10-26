@@ -2784,7 +2784,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@blocksuite/icons@npm:^2.1.68, @blocksuite/icons@npm:^2.1.69":
+"@blocksuite/icons@npm:2.1.69, @blocksuite/icons@npm:^2.1.68, @blocksuite/icons@npm:^2.1.69":
   version: 2.1.69
   resolution: "@blocksuite/icons@npm:2.1.69"
   peerDependencies:
