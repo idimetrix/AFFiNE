@@ -41,6 +41,11 @@ export interface AuthRuntimeConfigurations {
   allowSignup: boolean;
 
   /**
+   * Whether require email domain record verification before access restricted resources
+   */
+  requireEmailDomainVerification: boolean;
+
+  /**
    * Whether require email verification before access restricted resources
    */
   requireEmailVerification: boolean;
@@ -75,6 +80,10 @@ defineRuntimeConfig('auth', {
   allowSignup: {
     desc: 'Whether allow new registrations',
     default: true,
+  },
+  requireEmailDomainVerification: {
+    desc: 'Whether require email domain record verification before accessing restricted resources',
+    default: false,
   },
   requireEmailVerification: {
     desc: 'Whether require email verification before accessing restricted resources',

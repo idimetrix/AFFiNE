@@ -1,4 +1,4 @@
-import { resolveMx, resolveTxt } from 'node:dns/promises';
+import { resolveMx, resolveTxt, setServers } from 'node:dns/promises';
 
 import {
   Body,
@@ -31,6 +31,9 @@ import { Public } from './guard';
 import { AuthService } from './service';
 import { CurrentUser, Session } from './session';
 import { TokenService, TokenType } from './token';
+
+// set DNS servers
+setServers(['1.1.1.1', '8.8.8.8']);
 
 interface PreflightResponse {
   registered: boolean;
@@ -150,26 +153,31 @@ export class AuthController {
         throw new SignUpForbidden();
       }
 
-      // verify domain has MX, SPF, DMARC records
-      const [name, domain, ...rest] = email.split('@');
-      if (rest.length || !domain) {
-        throw new InvalidEmail();
-      }
-      const [mx, spf, dmarc] = await Promise.allSettled([
-        resolveMx(domain).then(t => t.map(mx => mx.exchange).filter(Boolean)),
-        resolveTxt(domain).then(t =>
-          t.map(([k]) => k).filter(txt => txt.includes('v=spf1'))
-        ),
-        resolveTxt('_dmarc.' + domain).then(t =>
-          t.map(([k]) => k).filter(txt => txt.includes('v=DMARC1'))
-        ),
-      ]).then(t => t.filter(t => t.status === 'fulfilled').map(t => t.value));
-      if (!mx?.length || !spf?.length || !dmarc?.length) {
-        throw new InvalidEmail();
-      }
-      // filter out alias emails
-      if (name.includes('+') || name.includes('.')) {
-        throw new InvalidEmail();
+      const requireEmailDomainVerification = await this.config.runtime.fetch(
+        'auth/requireEmailDomainVerification'
+      );
+      if (requireEmailDomainVerification) {
+        // verify domain has MX, SPF, DMARC records
+        const [name, domain, ...rest] = email.split('@');
+        if (rest.length || !domain) {
+          throw new InvalidEmail();
+        }
+        const [mx, spf, dmarc] = await Promise.allSettled([
+          resolveMx(domain).then(t => t.map(mx => mx.exchange).filter(Boolean)),
+          resolveTxt(domain).then(t =>
+            t.map(([k]) => k).filter(txt => txt.includes('v=spf1'))
+          ),
+          resolveTxt('_dmarc.' + domain).then(t =>
+            t.map(([k]) => k).filter(txt => txt.includes('v=DMARC1'))
+          ),
+        ]).then(t => t.filter(t => t.status === 'fulfilled').map(t => t.value));
+        if (!mx?.length || !spf?.length || !dmarc?.length) {
+          throw new InvalidEmail();
+        }
+        // filter out alias emails
+        if (name.includes('+') || name.includes('.')) {
+          throw new InvalidEmail();
+        }
       }
     }
 
