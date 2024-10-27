@@ -1,3 +1,5 @@
+import { resolveMx, resolveTxt } from 'node:dns/promises';
+
 import {
   Body,
   Controller,
@@ -146,6 +148,28 @@ export class AuthController {
       const allowSignup = await this.config.runtime.fetch('auth/allowSignup');
       if (!allowSignup) {
         throw new SignUpForbidden();
+      }
+
+      // verify domain has MX, SPF, DMARC records
+      const [name, domain, ...rest] = email.split('@');
+      if (rest.length || !domain) {
+        throw new InvalidEmail();
+      }
+      const [mx, spf, dmarc] = await Promise.allSettled([
+        resolveMx(domain).then(t => t.map(mx => mx.exchange).filter(Boolean)),
+        resolveTxt(domain).then(t =>
+          t.map(([k]) => k).filter(txt => txt.includes('v=spf1'))
+        ),
+        resolveTxt('_dmarc.' + domain).then(t =>
+          t.map(([k]) => k).filter(txt => txt.includes('v=DMARC1'))
+        ),
+      ]).then(t => t.filter(t => t.status === 'fulfilled').map(t => t.value));
+      if (!mx?.length || !spf?.length || !dmarc?.length) {
+        throw new InvalidEmail();
+      }
+      // filter out alias emails
+      if (name.includes('+') || name.includes('.')) {
+        throw new InvalidEmail();
       }
     }
 
